@@ -1,0 +1,90 @@
+{
+ "registry": "0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af",
+ "chain": 46630,
+ "chainName": "Robinhood Chain testnet",
+ "rpc": "https://rpc.testnet.chain.robinhood.com",
+ "explorer": "https://explorer.testnet.chain.robinhood.com/address/",
+ "interface": "AggregatorV3-compatible (latestRoundData, 8 decimals)",
+ "feeds": [
+  {
+   "id": 1,
+   "round": 16,
+   "answer": 21508670567,
+   "updatedAt": 1794405323,
+   "proxy": "0x4028E40d8596fB18870e63C3a9f1aa0109B96888",
+   "symbol": "CRM",
+   "description": "TAIL CRM/USD \u2014 Salesforce Stock Token price, 8 decimals",
+   "liveRead": "latestRoundData() on 0x4028E40d8596fB18870e63C3a9f1aa0109B96888"
+  },
+  {
+   "id": 2,
+   "round": 49,
+   "answer": 29338500000,
+   "updatedAt": 1794407721,
+   "proxy": "0xD320f571eC76eD9430B31e22bB2650bB4cfaae9C",
+   "symbol": "CIEN",
+   "description": "TAIL CIEN/USD \u2014 Ciena Stock Token price, 8 decimals",
+   "liveRead": "latestRoundData() on 0xD320f571eC76eD9430B31e22bB2650bB4cfaae9C"
+  },
+  {
+   "id": 3,
+   "round": 32,
+   "answer": 18999500000,
+   "updatedAt": 1794405021,
+   "proxy": "0xf68E4699FC82708F76928eEDa90F553A80d013fa",
+   "symbol": "WDAY",
+   "description": "TAIL WDAY/USD \u2014 Workday Stock Token price, 8 decimals",
+   "liveRead": "latestRoundData() on 0xf68E4699FC82708F76928eEDa90F553A80d013fa"
+  },
+  {
+   "id": 4,
+   "round": 1,
+   "answer": 11842500000,
+   "updatedAt": 1794388908,
+   "proxy": "0x06e0E3e404e8179b63456446D5fcD44f3a12b4a8",
+   "symbol": "DIS",
+   "description": "TAIL DIS/USD \u2014 Disney Stock Token price, 8 decimals",
+   "liveRead": "latestRoundData() on 0x06e0E3e404e8179b63456446D5fcD44f3a12b4a8"
+  },
+  {
+   "id": 5,
+   "round": 2,
+   "answer": 17245500000,
+   "updatedAt": 1794407421,
+   "proxy": "0x2b5726463D935f04E33157990F86FcbE59b195cB",
+   "symbol": "BA",
+   "description": "TAIL BA/USD \u2014 Boeing Stock Token price, 8 decimals",
+   "liveRead": "latestRoundData() on 0x2b5726463D935f04E33157990F86FcbE59b195cB"
+  },
+  {
+   "id": 6,
+   "round": 2,
+   "answer": 1230898549,
+   "updatedAt": 1794407721,
+   "proxy": "0x690A74e8561A0E0f3C29FFe23CD964B8Db34786A",
+   "symbol": "F",
+   "description": "TAIL F/USD \u2014 Ford Stock Token price, 8 decimals",
+   "liveRead": "latestRoundData() on 0x690A74e8561A0E0f3C29FFe23CD964B8Db34786A"
+  },
+  {
+   "id": 7,
+   "round": 2,
+   "answer": 23736500000,
+   "updatedAt": 1794407721,
+   "proxy": "0x385533130a72bD4a312d9C89435C45b89ACD694C",
+   "symbol": "ADBE",
+   "description": "TAIL ADBE/USD \u2014 Adobe Stock Token price, 8 decimals",
+   "liveRead": "latestRoundData() on 0x385533130a72bD4a312d9C89435C45b89ACD694C"
+  },
+  {
+   "id": 8,
+   "round": 4,
+   "answer": 10045295981,
+   "updatedAt": 1794407721,
+   "proxy": "0xc4065344E9e671F07bcf2A04C7cd3Cb38444E51c",
+   "symbol": "CSCO",
+   "description": "TAIL CSCO/USD \u2014 Cisco Stock Token price, 8 decimals",
+   "liveRead": "latestRoundData() on 0xc4065344E9e671F07bcf2A04C7cd3Cb38444E51c"
+  }
+ ]
+}

@@ -5,6 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TailFeed — price feeds for the tokens nobody prices</title>
 <meta name="description" content="Chainlink-compatible onchain price feeds for the 170 Stock Tokens on Robinhood Chain with no price feed, plus feed-health audits. Live on testnet.">
+<link rel="canonical" href="https://test.babakrahnama.top/">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TailFeed">
+<meta property="og:title" content="TailFeed — price feeds for the tokens nobody prices">
+<meta property="og:description" content="170 of the 203 Stock Tokens on Robinhood Chain have no onchain price feed. TailFeed publishes what's missing — AggregatorV3-compatible, verified source, free to read. Live on testnet.">
+<meta property="og:url" content="https://test.babakrahnama.top/">
+<meta property="og:image" content="https://test.babakrahnama.top/assets/logo.jpg">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@tailfeed">
+<meta name="twitter:title" content="TailFeed — price feeds for the tokens nobody prices">
+<meta name="twitter:description" content="Chainlink-compatible onchain price feeds for the Stock Tokens nobody prices. Robinhood Chain, live on testnet.">
+<meta name="twitter:image" content="https://test.babakrahnama.top/assets/logo.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://test.babakrahnama.top/#org",
+      "name": "TailFeed",
+      "url": "https://test.babakrahnama.top/",
+      "logo": "https://test.babakrahnama.top/assets/logo.jpg",
+      "sameAs": [
+        "https://x.com/tailfeed",
+        "https://github.com/slugelife-ux/tailfeed"
+      ],
+      "description": "Publisher of onchain price feeds for Stock Tokens that lack them, and auditor of all price feeds on Robinhood Chain."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://test.babakrahnama.top/#site",
+      "url": "https://test.babakrahnama.top/",
+      "name": "TailFeed",
+      "publisher": { "@id": "https://test.babakrahnama.top/#org" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "TailFeed price feeds",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Robinhood Chain (EVM, testnet 46630)",
+      "url": "https://test.babakrahnama.top/",
+      "description": "Onchain price-feed protocol for the ~170 of 203 Robinhood Chain Stock Tokens with no oracle coverage. Each feed is an independent AggregatorV3-compatible contract: latestRoundData(), 8 decimals, drop-in for Chainlink consumers. A deviation-triggered batch pusher updates all feeds in one transaction; a watchdog audits every feed on the chain against the exchange's own quotes.",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "softwareRequirements": "Any EVM client or JSON-RPC endpoint",
+      "author": { "@id": "https://test.babakrahnama.top/#org" },
+      "sameAs": "https://github.com/slugelife-ux/tailfeed"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is TailFeed Chainlink?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Chainlink publishes 33 feeds on Robinhood Chain and does it well. TailFeed prices the other 170 and audits everyone's feeds — ours and theirs — against the exchange's own quotes. Same AggregatorV3 interface, different publisher." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why do 170 Stock Tokens have no price feed?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Economics. Operating a feed costs money, so oracles cover the highest-volume names first. The long tail is 84% of the tokens on Robinhood Chain. TailFeed's batch-pushing design makes covering the tail affordable: one transaction updates every moved feed." }
+        },
+        {
+          "@type": "Question",
+          "name": "Where do TailFeed prices come from?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The exchange's own public quotes API — the same numbers a human sees on the trading screen, published onchain through verified contracts with the timestamp of publication. Round timestamps let any consumer be the staleness judge." }
+        },
+        {
+          "@type": "Question",
+          "name": "What does reading a TailFeed feed cost?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Nothing. No key, no signup, no whitelist, forever. A later paid tier covers alerts, history and API access; onchain reads stay free." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
 <link rel="icon" type="image/jpeg" href="assets/icon.jpg">
 <link rel="stylesheet" href="style.css?v=4">
 </head>

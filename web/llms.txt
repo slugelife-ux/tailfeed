@@ -1,0 +1,23 @@
+# TailFeed
+
+> Chainlink-compatible onchain price feeds for the Stock Tokens on Robinhood Chain that have no price feed, plus feed-health auditing for every feed on the chain. AggregatorV3 interface, verified source, free to read, live on testnet 46630.
+
+TailFeed publishes onchain price feeds for the ~170 of 203 Robinhood Chain Stock Tokens that no oracle covers (Chainlink publishes the other 33). Each feed is an independent AggregatorV3-compatible contract — a developer who already reads Chainlink feeds swaps one address and changes nothing else. A deviation-triggered batch pusher (≥0.5% moves or a 5-minute heartbeat) updates all feeds in one transaction. A watchdog checks every feed on the chain — ours and Chainlink's — against the exchange's own token quotes and logs the results hourly during US market hours.
+
+Key facts:
+- Product: onchain price feeds (oracle infrastructure), not a token, not financial advice
+- Coverage: 8 live feeds today (CRM, CIEN, WDAY, DIS, BA, F, ADBE, CSCO) — CRM/CIEN/WDAY are NOT covered by Chainlink on this chain
+- Interface: AggregatorV3 (latestRoundData, 8 decimals) — drop-in for Chainlink consumers
+- Chain: Robinhood Chain testnet (46630); mainnet (4663) planned after stability period
+- Cost: reads are free, no key, no signup, forever
+- Trust model: verified source, no mint, no upgrade path, one fixed pusher, public uptime log
+- Not affiliated with Robinhood Markets Inc. or Chainlink
+
+Docs:
+- [Website / live feed table](https://test.babakrahnama.top/) — reads the chain from the visitor's browser, no backend
+- [Source code](https://github.com/slugelife-ux/tailfeed) — contracts, 20-test suite, pusher, SDK, health checker, website
+- [Feed registry on explorer](https://explorer.testnet.chain.robinhood.com/address/0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af) — verified FeedRegistry
+- [feeds.json](https://test.babakrahnama.top/feeds.json) — machine-readable feed manifest: registry address, proxy addresses, RPC
+- [X / Twitter](https://x.com/tailfeed) — build log and feed incidents
+
+Optional sections held for later: REST API, alert subscriptions, npm SDK package.
