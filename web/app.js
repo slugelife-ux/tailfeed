@@ -15,6 +15,28 @@ const FEEDS = [
   { id: 6, sym: 'F',    company: 'Ford' },
   { id: 7, sym: 'ADBE', company: 'Adobe' },
   { id: 8, sym: 'CSCO', company: 'Cisco' },
+  { id: 9, sym: 'QCOM', company: 'Qualcomm' },
+  { id: 10, sym: 'PYPL', company: 'PayPal' },
+  { id: 11, sym: 'UBER', company: 'Uber' },
+  { id: 12, sym: 'XOM',  company: 'Exxon Mobil' },
+  { id: 13, sym: 'JPM',  company: 'JPMorgan' },
+  { id: 14, sym: 'PFE',  company: 'Pfizer' },
+  { id: 15, sym: 'LLY',  company: 'Eli Lilly' },
+  { id: 16, sym: 'GE',   company: 'GE' },
+  { id: 17, sym: 'IBM',  company: 'IBM' },
+  { id: 18, sym: 'COST', company: 'Costco' },
+  { id: 19, sym: 'UNH',  company: 'UnitedHealth' },
+  { id: 20, sym: 'V',    company: 'Visa' },
+  { id: 21, sym: 'NFLX', company: 'Netflix' },
+  { id: 22, sym: 'SOFI', company: 'SoFi' },
+  { id: 23, sym: 'SNOW', company: 'Snowflake' },
+  { id: 24, sym: 'CRWD', company: 'CrowdStrike' },
+  { id: 25, sym: 'DDOG', company: 'Datadog' },
+  { id: 26, sym: 'NET',  company: 'Cloudflare' },
+  { id: 27, sym: 'SHOP', company: 'Shopify' },
+  { id: 28, sym: 'ZM',   company: 'Zoom' },
+  { id: 29, sym: 'MDB',  company: 'MongoDB' },
+  { id: 30, sym: 'TEAM', company: 'Atlassian' },
 ];
 const HEARTBEAT_S = 300;
 
@@ -145,14 +167,14 @@ function bindProxyCopy() {
   });
 }
 
-/* ---------- gap grid: 203 tokens, 33 chainlink, 8 ours, 162 dark ---------- */
+/* ---------- gap grid: 203 tokens, 33 chainlink, FEEDS.length ours, rest dark ---------- */
 
 function buildGapGrid() {
   const grid = document.getElementById('gap-grid');
   const cells = [];
   for (let i = 0; i < 33; i++) cells.push('ch');
-  for (let i = 0; i < 8; i++) cells.push('tf');
-  for (let i = 0; i < 162; i++) cells.push('dark');
+  for (let i = 0; i < FEEDS.length; i++) cells.push('tf');
+  for (let i = 0; i < 203 - 33 - FEEDS.length; i++) cells.push('dark');
   grid.innerHTML = cells.map((c) => `<div class="cell ${c}"></div>`).join('');
 }
 

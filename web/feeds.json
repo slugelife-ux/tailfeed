@@ -8,53 +8,48 @@
  "feeds": [
   {
    "id": 1,
-   "round": 16,
-   "answer": 21508670567,
-   "updatedAt": 1794405323,
+   "round": 18,
+   "answer": 21815021954,
+   "updatedAt": 1794414321,
    "proxy": "0x4028E40d8596fB18870e63C3a9f1aa0109B96888",
    "symbol": "CRM",
-   "description": "TAIL CRM/USD \u2014 Salesforce Stock Token price, 8 decimals",
-   "liveRead": "latestRoundData() on 0x4028E40d8596fB18870e63C3a9f1aa0109B96888"
+   "description": "TAIL CRM/USD \u2014 Salesforce Stock Token price, 8 decimals"
   },
   {
    "id": 2,
-   "round": 49,
-   "answer": 29338500000,
-   "updatedAt": 1794407721,
+   "round": 60,
+   "answer": 29969500000,
+   "updatedAt": 1794414622,
    "proxy": "0xD320f571eC76eD9430B31e22bB2650bB4cfaae9C",
    "symbol": "CIEN",
-   "description": "TAIL CIEN/USD \u2014 Ciena Stock Token price, 8 decimals",
-   "liveRead": "latestRoundData() on 0xD320f571eC76eD9430B31e22bB2650bB4cfaae9C"
+   "description": "TAIL CIEN/USD \u2014 Ciena Stock Token price, 8 decimals"
   },
   {
    "id": 3,
-   "round": 32,
-   "answer": 18999500000,
-   "updatedAt": 1794405021,
+   "round": 35,
+   "answer": 18950000000,
+   "updatedAt": 1794414994,
    "proxy": "0xf68E4699FC82708F76928eEDa90F553A80d013fa",
    "symbol": "WDAY",
-   "description": "TAIL WDAY/USD \u2014 Workday Stock Token price, 8 decimals",
-   "liveRead": "latestRoundData() on 0xf68E4699FC82708F76928eEDa90F553A80d013fa"
+   "description": "TAIL WDAY/USD \u2014 Workday Stock Token price, 8 decimals"
   },
   {
    "id": 4,
-   "round": 1,
-   "answer": 11842500000,
-   "updatedAt": 1794388908,
+   "round": 2,
+   "answer": 11915500000,
+   "updatedAt": 1794408321,
    "proxy": "0x06e0E3e404e8179b63456446D5fcD44f3a12b4a8",
    "symbol": "DIS",
-   "description": "TAIL DIS/USD \u2014 Disney Stock Token price, 8 decimals",
-   "liveRead": "latestRoundData() on 0x06e0E3e404e8179b63456446D5fcD44f3a12b4a8"
+   "description": "TAIL DIS/USD \u2014 Disney Stock Token price, 8 decimals"
   },
   {
    "id": 5,
-   "round": 2,
-   "answer": 17245500000,
-   "updatedAt": 1794407421,
+   "round": 4,
+   "answer": 17292500000,
+   "updatedAt": 1794413423,
    "proxy": "0x2b5726463D935f04E33157990F86FcbE59b195cB",
    "symbol": "BA",
-   "description": "TAIL BA/USD \u2014 Boeing Stock Token price, 8 decimals",
-   "liveRead": "latestRoundData() on 0x2b5726463D935f04E33157990F86FcbE59b195cB"
+   "description": "TAIL BA/USD \u2014 Boeing Stock Token price, 8 decimals"
   },
   {
    "id": 6,
@@ -63,28 +58,223 @@
    "updatedAt": 1794407721,
    "proxy": "0x690A74e8561A0E0f3C29FFe23CD964B8Db34786A",
    "symbol": "F",
-   "description": "TAIL F/USD \u2014 Ford Stock Token price, 8 decimals",
-   "liveRead": "latestRoundData() on 0x690A74e8561A0E0f3C29FFe23CD964B8Db34786A"
+   "description": "TAIL F/USD \u2014 Ford Stock Token price, 8 decimals"
   },
   {
    "id": 7,
-   "round": 2,
-   "answer": 23736500000,
-   "updatedAt": 1794407721,
+   "round": 4,
+   "answer": 23724000000,
+   "updatedAt": 1794411321,
    "proxy": "0x385533130a72bD4a312d9C89435C45b89ACD694C",
    "symbol": "ADBE",
-   "description": "TAIL ADBE/USD \u2014 Adobe Stock Token price, 8 decimals",
-   "liveRead": "latestRoundData() on 0x385533130a72bD4a312d9C89435C45b89ACD694C"
+   "description": "TAIL ADBE/USD \u2014 Adobe Stock Token price, 8 decimals"
   },
   {
    "id": 8,
-   "round": 4,
-   "answer": 10045295981,
-   "updatedAt": 1794407721,
+   "round": 6,
+   "answer": 10169627638,
+   "updatedAt": 1794411622,
    "proxy": "0xc4065344E9e671F07bcf2A04C7cd3Cb38444E51c",
    "symbol": "CSCO",
-   "description": "TAIL CSCO/USD \u2014 Cisco Stock Token price, 8 decimals",
-   "liveRead": "latestRoundData() on 0xc4065344E9e671F07bcf2A04C7cd3Cb38444E51c"
+   "description": "TAIL CSCO/USD \u2014 Cisco Stock Token price, 8 decimals"
+  },
+  {
+   "id": 9,
+   "round": 2,
+   "answer": 17704216281,
+   "updatedAt": 1794414994,
+   "proxy": "0x40aA601B45058C4cb668f13281E89f5E91238572",
+   "symbol": "QCOM",
+   "description": "TAIL QCOM/USD \u2014 Qualcomm Stock Token price, 8 decimals"
+  },
+  {
+   "id": 10,
+   "round": 2,
+   "answer": 5896500000,
+   "updatedAt": 1794414994,
+   "proxy": "0x7DA579e0582D94CfFE18E8b057CaCdc598FFCd7C",
+   "symbol": "PYPL",
+   "description": "TAIL PYPL/USD \u2014 PayPal Stock Token price, 8 decimals"
+  },
+  {
+   "id": 11,
+   "round": 2,
+   "answer": 6983000000,
+   "updatedAt": 1794414994,
+   "proxy": "0x194613C9788c176BF6C25268F4949C2bac07344C",
+   "symbol": "UBER",
+   "description": "TAIL UBER/USD \u2014 Uber Stock Token price, 8 decimals"
+  },
+  {
+   "id": 12,
+   "round": 2,
+   "answer": 16652293143,
+   "updatedAt": 1794414994,
+   "proxy": "0x54cf672F199eD02B2D33bd8D09498578904452C1",
+   "symbol": "XOM",
+   "description": "TAIL XOM/USD \u2014 Exxon Mobil Stock Token price, 8 decimals"
+  },
+  {
+   "id": 13,
+   "round": 2,
+   "answer": 34357000000,
+   "updatedAt": 1794414994,
+   "proxy": "0x59a6395E8d2A804eC0b59D4b947FBF340312904e",
+   "symbol": "JPM",
+   "description": "TAIL JPM/USD \u2014 JPMorgan Stock Token price, 8 decimals"
+  },
+  {
+   "id": 14,
+   "round": 2,
+   "answer": 2944978116,
+   "updatedAt": 1794414994,
+   "proxy": "0xa02773C7230E2a225B6D174f75c88Fc0B6A9aFa6",
+   "symbol": "PFE",
+   "description": "TAIL PFE/USD \u2014 Pfizer Stock Token price, 8 decimals"
+  },
+  {
+   "id": 15,
+   "round": 2,
+   "answer": 142230825534,
+   "updatedAt": 1794414994,
+   "proxy": "0xa201B532327C04F861f30ab60F6DD9E7d25413fE",
+   "symbol": "LLY",
+   "description": "TAIL LLY/USD \u2014 Eli Lilly Stock Token price, 8 decimals"
+  },
+  {
+   "id": 16,
+   "round": 2,
+   "answer": 34195335143,
+   "updatedAt": 1794414994,
+   "proxy": "0x0c1A27f3d358e3DB5cAFFf90F60874B64045c58D",
+   "symbol": "GE",
+   "description": "TAIL GE/USD \u2014 GE Stock Token price, 8 decimals"
+  },
+  {
+   "id": 17,
+   "round": 2,
+   "answer": 24557319179,
+   "updatedAt": 1794414994,
+   "proxy": "0x30cbC3cd4514DCcef2104f2Af4EBf583c450C269",
+   "symbol": "IBM",
+   "description": "TAIL IBM/USD \u2014 IBM Stock Token price, 8 decimals"
+  },
+  {
+   "id": 18,
+   "round": 2,
+   "answer": 108096558385,
+   "updatedAt": 1794414994,
+   "proxy": "0x41aBaB1B4d5cA860dB2c387079CD69593D82ca7B",
+   "symbol": "COST",
+   "description": "TAIL COST/USD \u2014 Costco Stock Token price, 8 decimals"
+  },
+  {
+   "id": 19,
+   "round": 2,
+   "answer": 40113924638,
+   "updatedAt": 1794414994,
+   "proxy": "0xe4a790c30ECe1aE165dD0d1083a14d7f3e390806",
+   "symbol": "UNH",
+   "description": "TAIL UNH/USD \u2014 UnitedHealth Stock Token price, 8 decimals"
+  },
+  {
+   "id": 20,
+   "round": 2,
+   "answer": 42237007586,
+   "updatedAt": 1794414994,
+   "proxy": "0x3A38D74f349f431157dd86bA894A49603827F3C3",
+   "symbol": "V",
+   "description": "TAIL V/USD \u2014 Visa Stock Token price, 8 decimals"
+  },
+  {
+   "id": 21,
+   "round": 1,
+   "answer": 6366500000,
+   "updatedAt": 1794414971,
+   "proxy": "0xeF233A761937F93f1D7CAC1a2cFA02d2D43d2406",
+   "symbol": "NFLX",
+   "description": "TAIL NFLX/USD \u2014 Netflix Stock Token price, 8 decimals"
+  },
+  {
+   "id": 22,
+   "round": 1,
+   "answer": 1654500000,
+   "updatedAt": 1794414971,
+   "proxy": "0x30f37A85a296497640989f92d1dE0829cE621B83",
+   "symbol": "SOFI",
+   "description": "TAIL SOFI/USD \u2014 SoFi Stock Token price, 8 decimals"
+  },
+  {
+   "id": 23,
+   "round": 1,
+   "answer": 30651000000,
+   "updatedAt": 1794414971,
+   "proxy": "0x1cD360d3df1CbfE285969223bF6cdC17FE9d1444",
+   "symbol": "SNOW",
+   "description": "TAIL SNOW/USD \u2014 Snowflake Stock Token price, 8 decimals"
+  },
+  {
+   "id": 24,
+   "round": 1,
+   "answer": 93568000000,
+   "updatedAt": 1794414971,
+   "proxy": "0x5c1E23c236004F9C0079f92e7Afa099622091e2b",
+   "symbol": "CRWD",
+   "description": "TAIL CRWD/USD \u2014 CrowdStrike Stock Token price, 8 decimals"
+  },
+  {
+   "id": 25,
+   "round": 1,
+   "answer": 18777000000,
+   "updatedAt": 1794414971,
+   "proxy": "0xd9f4326C9a3978321bC7de7834a4e9E34c18D916",
+   "symbol": "DDOG",
+   "description": "TAIL DDOG/USD \u2014 Datadog Stock Token price, 8 decimals"
+  },
+  {
+   "id": 26,
+   "round": 1,
+   "answer": 32271000000,
+   "updatedAt": 1794414971,
+   "proxy": "0x24F12245B0c8EC9da657a14D85CdbDF832bF23Eb",
+   "symbol": "NET",
+   "description": "TAIL NET/USD \u2014 Cloudflare Stock Token price, 8 decimals"
+  },
+  {
+   "id": 27,
+   "round": 1,
+   "answer": 14906500000,
+   "updatedAt": 1794414971,
+   "proxy": "0x38b4258dD43Ed37DAE2Bb4020D6304054398Ef30",
+   "symbol": "SHOP",
+   "description": "TAIL SHOP/USD \u2014 Shopify Stock Token price, 8 decimals"
+  },
+  {
+   "id": 28,
+   "round": 1,
+   "answer": 9648500000,
+   "updatedAt": 1794414971,
+   "proxy": "0x94050265Fe2712AA7F6f56955041052FDd197463",
+   "symbol": "ZM",
+   "description": "TAIL ZM/USD \u2014 Zoom Stock Token price, 8 decimals"
+  },
+  {
+   "id": 29,
+   "round": 1,
+   "answer": 34291500000,
+   "updatedAt": 1794414971,
+   "proxy": "0x5D14E342838D282D59F36ec995b92eB7e7bf7dc8",
+   "symbol": "MDB",
+   "description": "TAIL MDB/USD \u2014 MongoDB Stock Token price, 8 decimals"
+  },
+  {
+   "id": 30,
+   "round": 1,
+   "answer": 15205000000,
+   "updatedAt": 1794414971,
+   "proxy": "0x6977F55EAE2783D5C719dDF2de18E9b581F30054",
+   "symbol": "TEAM",
+   "description": "TAIL TEAM/USD \u2014 Atlassian Stock Token price, 8 decimals"
   }
  ]
 }
