@@ -1,85 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TailFeed — onchain price feeds for Stock Tokens Chainlink doesn't cover</title>
-<meta name="description" content="Chainlink prices 33 of the 203 Stock Tokens on Robinhood Chain. TailFeed prices the other 170 — AggregatorV3-compatible onchain feeds, free to read, source verified.">
-<link rel="icon" href="assets/icon.jpg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TailFeed — price feeds for the tokens nobody prices</title>
+<meta name="description" content="Chainlink-compatible onchain price feeds for the 170 Stock Tokens on Robinhood Chain with no price feed, plus feed-health audits. Live on testnet.">
+<link rel="icon" type="image/jpeg" href="assets/icon.jpg">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="scanlines" aria-hidden="true"></div>
 
-<header>
-  <img class="logo" src="assets/logo.jpg" alt="TailFeed logo" width="72" height="72">
-  <div>
-    <h1>TAIL<span class="amber">FEED</span></h1>
-    <p class="tag">onchain price feeds for the Stock Tokens Chainlink doesn't cover</p>
-  </div>
-  <div class="chip">TESTNET · chain 46630</div>
+<div class="crt" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="brand" href="#top">
+    <img src="assets/logo.jpg" alt="TailFeed" width="28" height="28">
+    <span>tailfeed_</span>
+  </a>
+  <nav>
+    <a href="#feeds">feeds</a>
+    <a href="#gap">the gap</a>
+    <a href="#how">how</a>
+    <a href="#integrate">integrate</a>
+    <a href="#watchdog">watchdog</a>
+    <a href="#contracts">contracts</a>
+  </nav>
+  <a class="btn ghost" href="https://github.com/slugelife-ux/tailfeed" target="_blank" rel="noopener">[ src ]</a>
 </header>
 
-<main>
+<main id="top">
+
+<!-- ================= HERO ================= -->
 <section class="hero">
-  <p class="pitch">
-    <b>203 Stock Tokens</b> trade on Robinhood Chain. Chainlink prices <b>33</b> of them.
-    The other <b class="amber">170</b> are blind — no contract can read their price.
-    TailFeed prints the missing price tags, and watches every feed on the chain
-    for errors — including Chainlink's 33.
-  </p>
-  <p class="sub">AggregatorV3-compatible · verified source · no mint · no upgrade · reads free</p>
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <h1>Price feeds for the<br><span class="glow">tokens nobody prices.</span></h1>
+      <p class="sub">170 of the 203 Stock Tokens on Robinhood Chain have no onchain price feed — no contract on earth can read them. TailFeed publishes what's missing, in the format every contract already speaks. And we audit the feeds that do exist.</p>
+      <div class="cta">
+        <a class="btn primary" href="#feeds">watch them tick ⟶</a>
+        <button class="btn" id="btn-random">feed me a random price</button>
+      </div>
+      <div class="stats">
+        <div><b id="stat-feeds">–</b><span>feeds live onchain</span></div>
+        <div><b id="stat-rounds">–</b><span>rounds pushed total</span></div>
+        <div><b id="stat-refresh">5 min</b><span>heartbeat cadence</span></div>
+      </div>
+      <p class="tag">live on robinhood chain testnet (46630) · reads are free, forever · not affiliated with Robinhood</p>
+    </div>
+    <div class="term" aria-hidden="true">
+      <div class="term-bar"><span></span><span></span><span></span><em>bash — 80×24</em></div>
+      <pre id="boot" class="boot"></pre>
+    </div>
+  </div>
 </section>
 
-<section id="feeds">
-  <h2>&gt; live feeds <span class="cursor">_</span></h2>
-  <p class="hint">read straight from the chain by your browser — this page has no backend</p>
-  <table id="feed-table">
-    <thead>
-      <tr><th>feed</th><th>price</th><th>round</th><th>age</th><th>status</th><th>proxy</th></tr>
-    </thead>
-    <tbody><tr><td colspan="6" class="loading">connecting to rpc…</td></tr></tbody>
-  </table>
-  <p id="market-note" class="note" hidden></p>
-  <p class="hint">registry <a href="https://explorer.testnet.chain.robinhood.com/address/0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af" target="_blank" rel="noopener">0x05128EC5…b7f2Af</a> · source verified on <a href="https://explorer.testnet.chain.robinhood.com/address/0x05128ec5a91ee365e1e8b38f83157a84a5b7f2af" target="_blank" rel="noopener">Blockscout</a></p>
+<!-- ================= LIVE FEEDS ================= -->
+<section id="feeds" class="sec">
+  <div class="sec-head">
+    <h2>// live feeds</h2>
+    <p>Read straight from the chain by <em>your</em> browser — there is no backend here either. This table is itself the demo.</p>
+  </div>
+  <div class="table-wrap">
+    <table id="feed-table">
+      <thead>
+        <tr>
+          <th>feed</th><th>price</th>
+          <th>round</th><th>updated</th><th>proxy</th>
+        </tr>
+      </thead>
+      <tbody><tr><td colspan="5" class="loading">connecting to rpc.testnet…<span class="cursor">█</span></td></tr></tbody>
+    </table>
+  </div>
+  <div class="sync-row">
+    <span id="sync-msg">—</span>
+    <button id="btn-refresh" class="mini">[ resync ]</button>
+  </div>
+  <p class="note">feeds move on ≥0.5% deviation or the 5-minute heartbeat — during US market hours ticks land every few minutes. click any proxy to copy it.</p>
 </section>
 
-<section>
-  <h2>&gt; integrate in 60 seconds</h2>
-  <p>Feeds speak the exact AggregatorV3 language. If your contract already reads Chainlink, swap the address — nothing else.</p>
-  <pre><code>// Solidity — unchanged Chainlink integration
-AggregatorV3Interface feed = AggregatorV3Interface(
-    0xD320f571eC76eD9430B31e22bB2650bB4cfaae9C // TAIL CIEN/USD
-);
-(, int256 answer,, uint256 updatedAt,) = feed.latestRoundData();
-// answer  = 26401500000  (8 decimals)
-// check   : block.timestamp - updatedAt &lt; 300</code></pre>
-  <pre><code>// JavaScript — plain JSON-RPC, no library needed
-const r = await fetch('https://rpc.testnet.chain.robinhood.com', {
-  method: 'POST',
-  headers: {'Content-Type': 'application/json'},
-  body: JSON.stringify({jsonrpc: '2.0', id: 1, method: 'eth_call',
-    params: [{to: '0xD320f571eC76eD9430B31e22bB2650bB4cfaae9C',
-    data: '0xfeaf968c'}, 'latest']})
-});
-const {result} = await r.json(); // latestRoundData()</code></pre>
+<!-- ================= THE GAP ================= -->
+<section id="gap" class="sec">
+  <div class="sec-head">
+    <h2>// the gap</h2>
+    <p>Every square is one of the 203 Stock Tokens. A contract is blind to a token until someone writes its price onchain.</p>
+  </div>
+  <div id="gap-grid" class="gap-grid" aria-label="203 tokens: 33 priced by Chainlink, 8 priced by TailFeed, 162 still dark"></div>
+  <div class="legend">
+    <div><i class="dot ch"></i>priced by Chainlink — 33</div>
+    <div><i class="dot tf"></i>priced by TailFeed — <b id="gap-tf">8</b></div>
+    <div><i class="dot dark"></i>no onchain price — 162</div>
+  </div>
+  <p class="note">the dark mass is the product. a token without a price tag can't be collateral, can't be indexed, can't be touched by a contract. we're turning the lights on, feed by feed.</p>
 </section>
 
-<section>
-  <h2>&gt; why trust it</h2>
-  <ul class="plain">
-    <li><b>Source verified</b> on the chain's own explorer — every contract, click and read it.</li>
-    <li><b>No hidden powers</b>: no mint, no upgrade, no owner functions. One fixed pusher, set at construction.</li>
-    <li><b>Reads are free</b> — adoption is the business, not gas-farming.</li>
-    <li><b>Watched</b>: every feed (ours and Chainlink's) is checked against the exchange's own quotes. We already caught one sitting 0.40% off.</li>
-    <li><b>Testnet now, mainnet after</b> it survives days of rounds. No token — none is needed to use any of this.</li>
-  </ul>
+<!-- ================= HOW ================= -->
+<section id="how" class="sec">
+  <div class="sec-head">
+    <h2>// how it works</h2>
+    <p>Boring by design. One publisher, one batch, every deviation that matters.</p>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <pre class="ascii">  ┌─────────────────┐
+  │ ROBINHOOD       │
+  │ public quotes   │  ①
+  └────────┬────────┘
+           v   free API, polled every 5 min</pre>
+      <h3>read</h3>
+      <p>The exchange already publishes every quote free on its public API — tokenBid and tokenAsk included. Off-chain, though. Invisible to contracts.</p>
+    </article>
+    <article class="card">
+      <pre class="ascii">  ┌─────────────────┐
+  │  filter: Δ≥0.5% │  ②
+  └────────┬────────┘
+           v   quiet feeds are skipped</pre>
+      <h3>filter</h3>
+      <p>Feeds update on a real move or the heartbeat. Noise never hits the chain; nobody pays gas for stillness.</p>
+    </article>
+    <article class="card">
+      <pre class="ascii">  ┌─────────────────┐
+  │  ONE tx, batch  │  ③
+  └────────┬────────┘
+           v   every moved feed, once</pre>
+      <h3>publish</h3>
+      <p>One signed transaction updates all moved feeds together. Each feed keeps its own AggregatorV3 address — swap one address in your contract and you're reading TailFeed.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ================= INTEGRATE ================= -->
+<section id="integrate" class="sec">
+  <div class="sec-head">
+    <h2>// integrate</h2>
+    <p>If your contract already reads Chainlink-style feeds, you already know TailFeed. Swap the address, change nothing else.</p>
+  </div>
+  <div class="tabs">
+    <div class="tab-bar">
+      <button class="tab active" data-tab="solidity">solidity</button>
+      <button class="tab" data-tab="js">js · zero-dep sdk</button>
+      <button class="tab" data-tab="shell">shell</button>
+    </div>
+
+    <div class="tab-body active" id="tab-solidity">
+<pre><code><span class="c1">// the interface you already have</span>
+<span class="k">interface</span> AggregatorV3 {
+    <span class="k">function</span> <span class="fn">latestRoundData</span>() <span class="k">external view returns</span> (
+        <span class="t">uint80</span> roundId, <span class="t">int256</span> answer, <span class="t">uint256</span> startedAt,
+        <span class="t">uint256</span> updatedAt, <span class="t">uint80</span> answeredInRound
+    );
+}
+
+<span class="k">contract</span> <span class="t">Reader</span> {
+    <span class="c1">// TailFeed proxy — same shape as any Chainlink feed</span>
+    AggregatorV3 <span class="k">internal constant</span> <span class="v">CRM_USD</span> =
+        AggregatorV3(<span class="v">0x4028E40d8596fB18870e63C3a9f1aa0109B96888</span>);
+
+    <span class="k">function</span> <span class="fn">price</span>() <span class="k">public view returns</span> (<span class="t">int256</span>) {
+        (, <span class="t">int256</span> ans,,,) = <span class="v">CRM_USD</span>.<span class="fn">latestRoundData</span>();
+        <span class="k">return</span> ans; <span class="c1">// 21550718797 = $215.50718797, 8 decimals</span>
+    }
+}</code></pre>
+    </div>
+
+    <div class="tab-body" id="tab-js">
+<pre><code><span class="c1">// npm i tailfeed  (or vendor one file — zero deps)</span>
+<span class="k">import</span> TailFeed <span class="k">from</span> <span class="s1">'tailfeed'</span>;
+
+<span class="k">const</span> tf = <span class="k">new</span> TailFeed(<span class="s1">'https://rpc.testnet.chain.robinhood.com'</span>);
+<span class="k">const</span> feeds = <span class="k">await</span> tf.<span class="fn">list</span>();          <span class="c1">// every live feed + address</span>
+<span class="k">const</span> crm   = <span class="k">await</span> tf.<span class="fn">read</span>(<span class="s1">'CRM'</span>);
+
+console.<span class="fn">log</span>(crm.price);      <span class="c1">// 215.50718797</span>
+console.<span class="fn">log</span>(crm.round);      <span class="c1">// 13</span>
+console.<span class="fn">log</span>(crm.updatedAt);   <span class="c1">// Date — when the chain last heard</span></code></pre>
+    </div>
+
+    <div class="tab-body" id="tab-shell">
+<pre><code><span class="c1"># read a feed with cast, right now:</span>
+$ cast call 0x4028E40d8596fB18870e63C3a9f1aa0109B96888 \
+    <span class="s2">"latestRoundData()"</span> --rpc-url \
+    https://rpc.testnet.chain.robinhood.com
+
+<span class="c1"># the registry that owns all feeds:</span>
+$ cast call 0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af \
+    <span class="s2">"getFeed(uint256)(uint80,int256,uint256,uint256,address)"</span> 1 \
+    --rpc-url https://rpc.testnet.chain.robinhood.com</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WATCHDOG ================= -->
+<section id="watchdog" class="sec">
+  <div class="sec-head">
+    <h2>// the watchdog</h2>
+    <p>Being an oracle isn't just publishing. It's checking. We audit every feed on this chain — ours first, and everyone else's too.</p>
+  </div>
+  <div class="watch-grid">
+    <div class="finding">
+      <span class="finding-tag">[ finding 001 ]</span>
+      <p>One existing feed on this chain sat <b>0.40% off</b> its exchange quote — while its heartbeat looked perfectly fresh. A lending market using it naked would have been quietly mis-pricing collateral all afternoon. It rotated back within the hour. Still: an hour is a long time when you're an oracle.</p>
+    </div>
+    <div class="watch-how">
+      <p>Every market hour our checker reads all 33 existing feeds plus our own, compares each answer against the exchange's own token quote, and flags anything outside the spread. The uptime log is public history — an oracle that publishes its own track record is asking you to check its work.</p>
+      <p class="mini-note">the checker is in the repo. run it against our numbers. that's the point.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTRACTS ================= -->
+<section id="contracts" class="sec">
+  <div class="sec-head">
+    <h2>// contracts</h2>
+    <p>Verified source, no mint, no upgrade path, one fixed pusher, reads free forever. Don't trust this sentence — click through and read the contract.</p>
+  </div>
+  <div class="contract-row">
+    <div class="contract-card">
+      <h3>FeedRegistry</h3>
+      <code id="registry-addr">0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af</code>
+      <span class="badge">batch pushes · own the tx, not the feed</span>
+      <a class="verified" href="https://explorer.testnet.chain.robinhood.com/address/0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af" target="_blank" rel="noopener">✓ verified on explorer ⟶</a>
+    </div>
+    <ul class="rules">
+      <li><b>no mint function exists</b> — the token-less revenue model is a feature, not a gap</li>
+      <li><b>no proxy upgrade pattern</b> — what's verified today is what runs tomorrow</li>
+      <li><b>one pusher, fixed at construction</b> — visible in source, no admin rotation</li>
+      <li><b>reads cost nothing</b> — no key, no signup, no whitelist</li>
+    </ul>
+  </div>
+  <p class="note">feed proxy addresses: in the live table above — each verified, each an independent AggregatorV3.</p>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="sec">
+  <div class="sec-head"><h2>// straight answers</h2></div>
+  <div class="faq">
+    <details><summary>Is this Chainlink?</summary><p>No. Chainlink publishes 33 feeds on this chain and does it well. TailFeed prices the other 170 and audits everyone's feeds — ours and theirs — against the exchange's own quotes. Same interface, different publisher.</p></details>
+    <details><summary>Why do 170 tokens have no price feed?</summary><p>Economics. Operating a feed costs money, so oracles cover the highest-volume names first. The long tail waited — and that tail is 84% of the tokens on this chain. We built for it deliberately: batch pushing makes covering all of them affordable.</p></details>
+    <details><summary>Where do the prices come from?</summary><p>The exchange's own public quotes API — the same numbers a human sees on the trading screen, published onchain through our verified contracts with the timestamp of publication. Round timestamps let you be the staleness judge.</p></details>
+    <details><summary>Why testnet first?</summary><p>Because infrastructure earns its mainnet slot. Shake out every failure mode on testnet, prove weeks of clean rounds, publish the uptime log — then mainnet. The beta label means something here.</p></details>
+    <details><summary>What does it cost?</summary><p>Reading feeds: nothing, no key, forever. Later there'll be a paid tier for alerts, history and API access — reading stays free. Free reads are how an oracle gets adopted; adoption is the entire game.</p></details>
+    <details><summary>Is this investment advice?</summary><p>No, twice no. It's developer infrastructure, in testing. Prices describe Stock Tokens; they are not recommendations, and this project is not affiliated with Robinhood Markets Inc.</p></details>
+  </div>
 </section>
 
 <footer>
-  <p>building in the open · testnet phase · Robinhood Chain</p>
-  <p class="dim">Not affiliated with Robinhood. "Stock Tokens" is Robinhood's own term. Prices are for testing only — not investment data.</p>
+  <div class="foot-top">
+    <img src="assets/logo.jpg" alt="" width="22" height="22">
+    <span>tailfeed — chainlink-compatible price feeds for the uncovered tail</span>
+  </div>
+  <p class="disclaimer">Not affiliated with, endorsed by, or connected to Robinhood Markets Inc. or Chainlink. Stock Tokens are complex digital assets; prices published here are for software integration and testing during the testnet phase, not investment advice. All contract source is MIT-licensed and verified onchain.</p>
+  <p class="foot-line">built in the open · uptime log public · <a href="https://github.com/slugelife-ux/tailfeed" target="_blank" rel="noopener">github.com/slugelife-ux/tailfeed</a></p>
 </footer>
+
 </main>
 
 <script src="app.js"></script>
