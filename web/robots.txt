@@ -28,4 +28,4 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
-Sitemap: https://test.babakrahnama.top/sitemap.xml
+Sitemap: https://tailfeed.dev/sitemap.xml

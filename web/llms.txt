@@ -14,10 +14,10 @@ Key facts:
 - Not affiliated with Robinhood Markets Inc. or Chainlink
 
 Docs:
-- [Website / live feed table](https://test.babakrahnama.top/) — reads the chain from the visitor's browser, no backend
+- [Website / live feed table](https://tailfeed.dev/) — reads the chain from the visitor's browser, no backend
 - [Source code](https://github.com/slugelife-ux/tailfeed) — contracts, 20-test suite, pusher, SDK, health checker, website
 - [Feed registry on explorer](https://explorer.testnet.chain.robinhood.com/address/0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af) — verified FeedRegistry
-- [feeds.json](https://test.babakrahnama.top/feeds.json) — machine-readable feed manifest: registry address, proxy addresses, RPC
+- [feeds.json](https://tailfeed.dev/feeds.json) — machine-readable feed manifest: registry address, proxy addresses, RPC
 - [X / Twitter](https://x.com/tailfeed) — build log and feed incidents
 
 Optional sections held for later: REST API, alert subscriptions, npm SDK package.
