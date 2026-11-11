@@ -76,6 +76,7 @@ a:hover { text-decoration: underline; }
   border: 1px solid var(--line);
   padding: .5rem 1rem;
   cursor: pointer;
+  white-space: nowrap;
 }
 .btn:hover { border-color: var(--phos-dim); text-decoration: none; box-shadow: 0 0 12px rgba(37,255,69,.15); }
 .btn.primary { background: var(--phos); color: #03130a; font-weight: 700; border-color: var(--phos); }
@@ -156,7 +157,7 @@ main { max-width: 1060px; margin: 0 auto; padding: 0 1.2rem; }
 .tag { color: var(--faint); font-size: 12px; letter-spacing: .04em; }
 
 /* ---------- feeds table ---------- */
-.table-wrap { border: 1px solid var(--line); background: var(--bg2); }
+.table-wrap { border: 1px solid var(--line); background: var(--bg2); overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 thead th {
   text-align: left;
@@ -177,11 +178,12 @@ td.loading { color: var(--muted); padding: 1.4rem .8rem; }
 .f-delta-down { color: var(--red); }
 .f-delta-flat { color: var(--faint); }
 .f-round { color: var(--muted); }
-.f-age { color: var(--muted); }
+.f-age { color: var(--muted); white-space: nowrap; }
 .f-fresh { color: var(--phos); }
 .f-proxy {
   color: var(--muted); font-size: 11.5px;
   cursor: pointer; position: relative;
+  white-space: nowrap;
 }
 .f-proxy:hover { color: var(--phos); }
 .f-proxy.copied::after {
@@ -329,6 +331,20 @@ footer {
   .top nav { display: none; }
   .watch-grid, .contract-row { grid-template-columns: 1fr; }
   .stats { gap: 1.4rem; }
-  .gap-grid { grid-template-columns: repeat(15, 1fr); }
+  .hero-grid { grid-template-columns: 1fr; }
+  .term { margin-top: 0; }
+  /* keep the 203-square picture exact on phones: 29 cols, cells shrink */
+  .gap-grid {
+    grid-template-columns: repeat(29, 1fr);
+    gap: 3px;
+    padding: .6rem;
+  }
+  .cell { border-width: 1px; }
+  table { font-size: 12px; }
+  thead th { padding: .45rem .55rem; letter-spacing: .08em; }
+  tbody td { padding: .4rem .55rem; }
+  .f-name { font-size: 10.5px; }
+  .fq { display: none; }
   .f-proxy { font-size: 10px; }
+  .sync-row { flex-wrap: wrap; gap: .3rem; }
 }

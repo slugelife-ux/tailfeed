@@ -111,12 +111,14 @@ async function loadFeeds() {
       const age = Math.max(0, nowTs - feed.updatedAt);
       const ageTxt = age < 90 ? 'just now' : Math.floor(age / 60) + 'm';
       const fresh = age < HEARTBEAT_S * 3 || !marketOpen(nowTs);
+      const shortAddr = window.matchMedia('(max-width: 760px)').matches
+        ? (a) => a.slice(0, 6) + '…' : short;
       return `<tr>
-        <td><span class="f-sym">${f.sym}</span><span class="f-name">${f.company} · TAIL ${f.sym}/USD</span></td>
+        <td><span class="f-sym">${f.sym}</span><span class="f-name">${f.company}<span class="fq"> · TAIL ${f.sym}/USD</span></span></td>
         <td class="f-price">${fmtPrice(feed.answer)}</td>
         <td class="f-round">${feed.roundId}</td>
         <td class="f-age ${fresh ? 'f-fresh' : ''}">${ageTxt}</td>
-        <td><span class="f-proxy" data-addr="${feed.proxy}" title="click to copy">${short(feed.proxy)}</span></td>
+        <td><span class="f-proxy" data-addr="${feed.proxy}" title="click to copy">${shortAddr(feed.proxy)}</span></td>
       </tr>`;
     }).join('');
 
