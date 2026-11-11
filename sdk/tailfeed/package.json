@@ -1,0 +1,16 @@
+{
+  "name": "tailfeed",
+  "version": "0.1.0",
+  "description": "Zero-dependency client for TailFeed onchain price feeds (Robinhood Chain). AggregatorV3-compatible reads via plain JSON-RPC.",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": ["index.js", "index.d.ts", "README.md", "LICENSE"],
+  "keywords": ["oracle", "price-feed", "aggregatorv3", "chainlink", "robinhood-chain", "stock-tokens", "web3"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slugelife-ux/tailfeed"
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TailFeed — onchain price feeds for Stock Tokens Chainlink doesn't cover</title>
+<meta name="description" content="Chainlink prices 33 of the 203 Stock Tokens on Robinhood Chain. TailFeed prices the other 170 — AggregatorV3-compatible onchain feeds, free to read, source verified.">
+<link rel="icon" href="assets/icon.jpg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="scanlines" aria-hidden="true"></div>
+
+<header>
+  <img class="logo" src="assets/logo.jpg" alt="TailFeed logo" width="72" height="72">
+  <div>
+    <h1>TAIL<span class="amber">FEED</span></h1>
+    <p class="tag">onchain price feeds for the Stock Tokens Chainlink doesn't cover</p>
+  </div>
+  <div class="chip">TESTNET · chain 46630</div>
+</header>
+
+<main>
+<section class="hero">
+  <p class="pitch">
+    <b>203 Stock Tokens</b> trade on Robinhood Chain. Chainlink prices <b>33</b> of them.
+    The other <b class="amber">170</b> are blind — no contract can read their price.
+    TailFeed prints the missing price tags, and watches every feed on the chain
+    for errors — including Chainlink's 33.
+  </p>
+  <p class="sub">AggregatorV3-compatible · verified source · no mint · no upgrade · reads free</p>
+</section>
+
+<section id="feeds">
+  <h2>&gt; live feeds <span class="cursor">_</span></h2>
+  <p class="hint">read straight from the chain by your browser — this page has no backend</p>
+  <table id="feed-table">
+    <thead>
+      <tr><th>feed</th><th>price</th><th>round</th><th>age</th><th>status</th><th>proxy</th></tr>
+    </thead>
+    <tbody><tr><td colspan="6" class="loading">connecting to rpc…</td></tr></tbody>
+  </table>
+  <p id="market-note" class="note" hidden></p>
+  <p class="hint">registry <a href="https://explorer.testnet.chain.robinhood.com/address/0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af" target="_blank" rel="noopener">0x05128EC5…b7f2Af</a> · source verified on <a href="https://explorer.testnet.chain.robinhood.com/address/0x05128ec5a91ee365e1e8b38f83157a84a5b7f2af" target="_blank" rel="noopener">Blockscout</a></p>
+</section>
+
+<section>
+  <h2>&gt; integrate in 60 seconds</h2>
+  <p>Feeds speak the exact AggregatorV3 language. If your contract already reads Chainlink, swap the address — nothing else.</p>
+  <pre><code>// Solidity — unchanged Chainlink integration
+AggregatorV3Interface feed = AggregatorV3Interface(
+    0xD320f571eC76eD9430B31e22bB2650bB4cfaae9C // TAIL CIEN/USD
+);
+(, int256 answer,, uint256 updatedAt,) = feed.latestRoundData();
+// answer  = 26401500000  (8 decimals)
+// check   : block.timestamp - updatedAt &lt; 300</code></pre>
+  <pre><code>// JavaScript — plain JSON-RPC, no library needed
+const r = await fetch('https://rpc.testnet.chain.robinhood.com', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({jsonrpc: '2.0', id: 1, method: 'eth_call',
+    params: [{to: '0xD320f571eC76eD9430B31e22bB2650bB4cfaae9C',
+    data: '0xfeaf968c'}, 'latest']})
+});
+const {result} = await r.json(); // latestRoundData()</code></pre>
+</section>
+
+<section>
+  <h2>&gt; why trust it</h2>
+  <ul class="plain">
+    <li><b>Source verified</b> on the chain's own explorer — every contract, click and read it.</li>
+    <li><b>No hidden powers</b>: no mint, no upgrade, no owner functions. One fixed pusher, set at construction.</li>
+    <li><b>Reads are free</b> — adoption is the business, not gas-farming.</li>
+    <li><b>Watched</b>: every feed (ours and Chainlink's) is checked against the exchange's own quotes. We already caught one sitting 0.40% off.</li>
+    <li><b>Testnet now, mainnet after</b> it survives days of rounds. No token — none is needed to use any of this.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>building in the open · testnet phase · Robinhood Chain</p>
+  <p class="dim">Not affiliated with Robinhood. "Stock Tokens" is Robinhood's own term. Prices are for testing only — not investment data.</p>
+</footer>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
