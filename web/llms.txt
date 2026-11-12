@@ -16,7 +16,7 @@ Key facts:
 Docs:
 - [Website / live feed table](https://tailfeed.dev/) — reads the chain from the visitor's browser, no backend
 - [Source code](https://github.com/slugelife-ux/tailfeed) — contracts, 20-test suite, pusher, SDK, health checker, website
-- [Feed registry on explorer](https://explorer.testnet.chain.robinhood.com/address/0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af) — verified FeedRegistry
+- [Feed registry on explorer](https://explorer.testnet.chain.robinhood.com/address/0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c) — verified FeedRegistry
 - [feeds.json](https://tailfeed.dev/feeds.json) — machine-readable feed manifest: registry address, proxy addresses, RPC
 - [X / Twitter](https://x.com/tailfeed) — build log and feed incidents
 - [Telegram channel](https://t.me/tailfeed) — daily feed-health digest, one line per market day

@@ -4,7 +4,7 @@
    random price → refresh loop. */
 
 const RPC = 'https://rpc.testnet.chain.robinhood.com';
-const REGISTRY = '0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af';
+const REGISTRY = '0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c'; // FeedRegistryV2 — round history
 const EXPLORER = 'https://explorer.testnet.chain.robinhood.com/address/';
 const FEEDS = [
   { id: 1, sym: 'CRM', company: 'Salesforce' },
@@ -71,7 +71,7 @@ const FEEDS = [
 const HEARTBEAT_S = 300;
 
 const SEL_GETFEED = '0xecb76d90'; // getFeed(uint256) — registry
-// NOTE: the proxy deliberately exposes no getRoundData — history is a v1.1 item.
+const SEL_GETROUND = '0x9a6fc8f5'; // getRoundData(uint80) — proxy, v1.1 history
 
 /* ---------- chain plumbing ---------- */
 
@@ -122,7 +122,7 @@ function marketOpen(nowTs) {
 const BOOT_LINES = [
   '$ ssh oracle@tailfeed',
   '> rpc.testnet…robinhood.com ok',
-  '> chain 46630 · registry 0x0512…f2Af',
+  '> chain 46630 · registry 0x9601…C9c',
   '> source verified · pulling rounds …',
 ];
 
@@ -157,7 +157,7 @@ async function loadFeeds() {
       feeds.reduce((s, f) => s + Number(f.roundId), 0);
     document.getElementById('gap-tf').textContent = feeds.length;
 
-    // single-shot reads, no history fetch (proxies expose no getRoundData yet)
+    // single-shot reads + click-to-expand sparkline from onchain round history
     const rows = feeds.map((feed, i) => {
       const f = FEEDS[i];
       const age = Math.max(0, nowTs - feed.updatedAt);
@@ -165,7 +165,7 @@ async function loadFeeds() {
       const fresh = age < HEARTBEAT_S * 3 || !marketOpen(nowTs);
       const shortAddr = window.matchMedia('(max-width: 760px)').matches
         ? (a) => a.slice(0, 6) + '…' : short;
-      return `<tr>
+      return `<tr class="feed-row" data-i="${i}" title="click for round history">
         <td><span class="f-sym">${f.sym}</span><span class="f-name">${f.company}<span class="fq"> · TAIL ${f.sym}/USD</span></span></td>
         <td class="f-price">${fmtPrice(feed.answer)}</td>
         <td class="f-round">${feed.roundId}</td>
@@ -179,15 +179,79 @@ async function loadFeeds() {
     document.getElementById('sync-msg').textContent =
       `synced ${new Date().toLocaleTimeString()} · chain 46630 · ${marketOpen(nowTs) ? 'market open' : 'market closed'} · ${feeds.length} feeds read live`;
     bindProxyCopy();
+    bindSparkRows();
   } catch (e) {
     document.getElementById('sync-msg').textContent = 'rpc unreachable — retrying on the next tick';
     tbody.innerHTML = `<tr><td colspan="5" class="loading">rpc unreachable: ${e.message} — will retry<span class="cursor">█</span></td></tr>`;
   }
 }
 
+/* ---------- sparklines from onchain round history (v1.1) ---------- */
+
+function bindSparkRows() {
+  document.querySelectorAll('tr.feed-row').forEach((tr) => {
+    tr.onclick = () => toggleSpark(Number(tr.dataset.i), tr);
+  });
+}
+
+async function toggleSpark(i, tr) {
+  const next = tr.nextElementSibling;
+  if (next && next.classList.contains('spark-row')) { next.remove(); return; }
+  document.querySelectorAll('tr.spark-row').forEach((r) => r.remove());
+
+  const row = document.createElement('tr');
+  row.className = 'spark-row';
+  const cell = document.createElement('td');
+  cell.colSpan = 5;
+  cell.innerHTML = 'reading rounds…';
+  row.appendChild(cell);
+  tr.after(row);
+
+  try {
+    const meta = FEEDS[i];
+    const feed = parseFeed(await call(REGISTRY, SEL_GETFEED + padU(BigInt(meta.id))));
+    const latest = Number(feed.roundId);
+    if (latest === 0) {
+      cell.innerHTML = `<span class="spark-note">${meta.sym}: no rounds yet — waiting for first push (halted or new)</span>`;
+      return;
+    }
+    const first = Math.max(1, latest - 11);
+    const ids = [];
+    for (let r = first; r <= latest; ++r) ids.push(r);
+    const answers = await Promise.all(ids.map((r) =>
+      call(feed.proxy, SEL_GETROUND + padU(BigInt(r)))
+        .then((h) => BigInt.asIntN(256, word(h, 1)))
+        .catch(() => null)
+    ));
+    const pts = answers.map((a) => (a === null ? null : Number(a) / 1e8));
+    const valid = pts.filter((p) => p !== null);
+    if (valid.length < 2) {
+      cell.innerHTML = `<span class="spark-note">${meta.sym}: only ${valid.length} round(s) onchain so far</span>`;
+      return;
+    }
+    const W = 180, H = 40, PAD = 3;
+    const min = Math.min(...valid), max = Math.max(...valid);
+    const span = max - min || 1e-9;
+    const step = (W - PAD * 2) / Math.max(1, pts.length - 1);
+    const xy = pts.map((p, k) => (p === null ? null :
+      `${(PAD + k * step).toFixed(1)},${(PAD + (1 - (p - min) / span) * (H - PAD * 2)).toFixed(1)}`))
+      .filter(Boolean);
+    const delta = ((valid[valid.length - 1] - valid[0]) / valid[0] * 100).toFixed(2);
+    const up = valid[valid.length - 1] >= valid[0];
+    cell.innerHTML =
+      `<svg class="spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">
+         <polyline points="${xy.join(' ')}" fill="none" stroke="${up ? '#25FF45' : '#FF4545'}" stroke-width="1.5"/>
+       </svg>
+       <span class="spark-note">${meta.sym} · rounds ${first}\u2013${latest} · ${min.toFixed(2)}\u2013${max.toFixed(2)} · ${up ? '+' : ''}${delta}% over window</span>`;
+  } catch (e) {
+    cell.innerHTML = `<span class="spark-note">history read failed: ${e.message}</span>`;
+  }
+}
+
 function bindProxyCopy() {
   document.querySelectorAll('.f-proxy').forEach((el) => {
-    el.onclick = async () => {
+    el.onclick = async (e) => {
+      e.stopPropagation(); // don't toggle the sparkline when copying
       try {
         await navigator.clipboard.writeText(el.dataset.addr);
         el.classList.add('copied');

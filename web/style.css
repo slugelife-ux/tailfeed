@@ -348,3 +348,21 @@ footer {
   .f-proxy { font-size: 10px; }
   .sync-row { flex-wrap: wrap; gap: .3rem; }
 }
+
+/* ---------- sparkline rows (v1.1 round history) ---------- */
+
+tr.spark-row td {
+  padding: 6px 12px 10px;
+  background: rgba(37, 255, 69, 0.03);
+  border-bottom: 1px solid rgba(37, 255, 69, 0.15);
+}
+tr.feed-row { cursor: pointer; }
+tr.feed-row:hover { background: rgba(37, 255, 69, 0.04); }
+.spark-note {
+  display: inline-block;
+  margin-left: 10px;
+  color: #8ae89b;
+  font-size: 12px;
+  vertical-align: top;
+}
+svg.spark { vertical-align: middle; }

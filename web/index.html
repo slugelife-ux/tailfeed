@@ -88,7 +88,7 @@
 </script>
 
 <link rel="icon" type="image/jpeg" href="assets/icon.jpg">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 
@@ -237,7 +237,7 @@
 <span class="k">contract</span> <span class="t">Reader</span> {
     <span class="c1">// TailFeed proxy — same shape as any Chainlink feed</span>
     AggregatorV3 <span class="k">internal constant</span> <span class="v">CRM_USD</span> =
-        AggregatorV3(<span class="v">0x4028E40d8596fB18870e63C3a9f1aa0109B96888</span>);
+        AggregatorV3(<span class="v">0xbE17D53613e35A804908b3372944373C80cB285f</span>);
 
     <span class="k">function</span> <span class="fn">price</span>() <span class="k">public view returns</span> (<span class="t">int256</span>) {
         (, <span class="t">int256</span> ans,,,) = <span class="v">CRM_USD</span>.<span class="fn">latestRoundData</span>();
@@ -261,12 +261,12 @@ console.<span class="fn">log</span>(crm.updatedAt);   <span class="c1">// Date �
 
     <div class="tab-body" id="tab-shell">
 <pre><code><span class="c1"># read a feed with cast, right now:</span>
-$ cast call 0x4028E40d8596fB18870e63C3a9f1aa0109B96888 \
+$ cast call 0xbE17D53613e35A804908b3372944373C80cB285f \
     <span class="s2">"latestRoundData()"</span> --rpc-url \
     https://rpc.testnet.chain.robinhood.com
 
 <span class="c1"># the registry that owns all feeds:</span>
-$ cast call 0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af \
+$ cast call 0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c \
     <span class="s2">"getFeed(uint256)(uint80,int256,uint256,uint256,address)"</span> 1 \
     --rpc-url https://rpc.testnet.chain.robinhood.com</code></pre>
     </div>
@@ -299,10 +299,10 @@ $ cast call 0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af \
   </div>
   <div class="contract-row">
     <div class="contract-card">
-      <h3>FeedRegistry</h3>
-      <code id="registry-addr">0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af</code>
-      <span class="badge">batch pushes · own the tx, not the feed</span>
-      <a class="verified" href="https://explorer.testnet.chain.robinhood.com/address/0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af" target="_blank" rel="noopener">✓ verified on explorer ⟶</a>
+      <h3>FeedRegistryV2</h3>
+      <code id="registry-addr">0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c</code>
+      <span class="badge">batch pushes · round history · own the tx, not the feed</span>
+      <a class="verified" href="https://explorer.testnet.chain.robinhood.com/address/0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c" target="_blank" rel="noopener">✓ verified on explorer ⟶</a>
     </div>
     <ul class="rules">
       <li><b>no mint function exists</b> — the token-less revenue model is a feature, not a gap</li>
@@ -338,6 +338,6 @@ $ cast call 0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af \
 
 </main>
 
-<script src="app.js?v=7"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>

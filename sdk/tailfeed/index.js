@@ -31,7 +31,7 @@ async function rpcCall(rpc, method, params) {
  */
 export function createClient(opts = {}) {
   const rpc = opts.rpc || 'https://rpc.testnet.chain.robinhood.com';
-  const registry = opts.registry || '0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af';
+  const registry = opts.registry || '0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c';
 
   const call = (to, data) => rpcCall(rpc, 'eth_call', [{ to, data }, 'latest']);
 
@@ -71,7 +71,7 @@ export function createClient(opts = {}) {
 
 export const TESTNET = {
   chainId: 46630,
-  registry: '0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af',
+  registry: '0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c',
   rpc: 'https://rpc.testnet.chain.robinhood.com',
   feeds: { CRM: 1, CIEN: 2, WDAY: 3 },
 };

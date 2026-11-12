@@ -11,7 +11,7 @@ Onchain price feeds for the Stock Tokens Chainlink doesn't cover — plus feed-h
 
 | | address |
 |---|---|
-| FeedRegistry | [`0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af`](https://explorer.testnet.chain.robinhood.com/address/0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af) |
+| FeedRegistry | [`0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c`](https://explorer.testnet.chain.robinhood.com/address/0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c) |
 | TAIL CRM/USD | `0x4028E40d8596fB18870e63C3a9f1aa0109B96888` |
 | TAIL CIEN/USD | `0xD320f571eC76eD9430B31e22bB2650bB4cfaae9C` |
 | TAIL WDAY/USD | `0xf68E4699FC82708F76928eEDa90F553A80d013fa` |

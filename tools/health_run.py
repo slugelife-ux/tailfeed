@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 ROOT = "/root/onchain-studio"
 LOG_DIR = f"{ROOT}/ops/health_log"
 TESTNET_RPC = "https://rpc.testnet.chain.robinhood.com"
-REGISTRY = "0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af"
+REGISTRY = "0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c"
 HEARTBEAT_S = 300
 TOLERANCE = Decimal("0.005")  # our feeds publish on >=0.5% moves; allow that
 
