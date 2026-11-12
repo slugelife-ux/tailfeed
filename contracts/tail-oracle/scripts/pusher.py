@@ -14,6 +14,7 @@ import json
 import subprocess
 import sys
 import urllib.request
+from datetime import datetime, timezone
 from decimal import Decimal, ROUND_HALF_UP
 
 ASSETS_URL = "https://api.robinhood.com/rhj/assets"
@@ -57,9 +58,11 @@ def main():
         if int(proxy, 16) == 0:
             sys.exit(f"{sym} (feed {fid}): not registered onchain")
 
-        # current onchain answer for deviation check (0 means never pushed)
-        onchain = cast("call", proxy, "latestAnswer()(int256)", "--rpc-url", args.rpc)
-        current = int(onchain.replace("[", "").replace("]", "").split()[0])
+        # current onchain answer + timestamp for deviation & heartbeat check
+        # (latestRoundData: roundId, answer, startedAt, updatedAt, answeredInRound)
+        rd = cast("call", proxy, "latestRoundData()(uint80,int256,uint256,uint256,uint80)", "--rpc-url", args.rpc)
+        parts = rd.replace("[", "").replace("]", "").replace(",", "").split()
+        current, updated = int(parts[1]), int(parts[3])
 
         quote = http_json(PRICE_URL.format(sym))["quotes"][0]
         if quote.get("isTradingHalt"):
@@ -72,12 +75,20 @@ def main():
         if px <= 0:
             sys.exit(f"{sym}: computed non-positive price")
 
-        if current > 0:
+        # market hours gate for heartbeat enforcement (US equities, UTC)
+        dt = datetime.now(timezone.utc)
+        market_open = dt.weekday() < 5 and 14*60+30 <= dt.hour*60 + dt.minute <= 21*60
+        stale = market_open and updated > 0 and (int(dt.timestamp()) - updated) > args.heartbeat
+
+        if current > 0 and not stale:
             moved = abs(Decimal(px) - Decimal(current)) / Decimal(current)
             if moved < Decimal(args.deviation):
                 print(f"{sym}: onchain {current}, computed {px}, moved {moved:.4%} < threshold, skip")
                 continue
             print(f"{sym}: onchain {current}, computed {px}, moved {moved:.4%} -> PUSH")
+        elif stale:
+            age = int(dt.timestamp()) - updated
+            print(f"{sym}: onchain {current}, computed {px}, age {age}s > heartbeat {args.heartbeat}s -> PUSH (heartbeat)")
         else:
             print(f"{sym}: never pushed, computed {px} -> PUSH")
 
