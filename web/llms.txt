@@ -6,7 +6,7 @@ TailFeed publishes onchain price feeds for the ~170 of 203 Robinhood Chain Stock
 
 Key facts:
 - Product: onchain price feeds (oracle infrastructure), not a token, not financial advice
-- Coverage: 30 live feeds (CRM, CIEN, WDAY, DIS, BA, F, ADBE, CSCO, QCOM, PYPL, UBER, XOM, JPM, PFE, LLY, GE, IBM, COST, UNH, V, NFLX, SOFI, SNOW, CRWD, DDOG, NET, SHOP, ZM, MDB, TEAM) — none covered by Chainlink on this chain
+- Coverage: 60 live feeds, none covered by Chainlink on this chain (full list in feeds.json)
 - Interface: AggregatorV3 (latestRoundData, 8 decimals) — drop-in for Chainlink consumers
 - Chain: Robinhood Chain testnet (46630); mainnet (4663) planned after stability period
 - Cost: reads are free, no key, no signup, forever
@@ -19,5 +19,6 @@ Docs:
 - [Feed registry on explorer](https://explorer.testnet.chain.robinhood.com/address/0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af) — verified FeedRegistry
 - [feeds.json](https://tailfeed.dev/feeds.json) — machine-readable feed manifest: registry address, proxy addresses, RPC
 - [X / Twitter](https://x.com/tailfeed) — build log and feed incidents
+- [Telegram channel](https://t.me/tailfeed) — daily feed-health digest, one line per market day
 
 Optional sections held for later: REST API, alert subscriptions, npm SDK package.

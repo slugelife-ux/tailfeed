@@ -33,6 +33,7 @@
       "logo": "https://tailfeed.dev/assets/logo.jpg",
       "sameAs": [
         "https://x.com/tailfeed",
+        "https://t.me/tailfeed",
         "https://github.com/slugelife-ux/tailfeed"
       ],
       "description": "Publisher of onchain price feeds for Stock Tokens that lack them, and auditor of all price feeds on Robinhood Chain."
@@ -87,7 +88,7 @@
 </script>
 
 <link rel="icon" type="image/jpeg" href="assets/icon.jpg">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -107,6 +108,7 @@
     <a href="#contracts">contracts</a>
   </nav>
   <a class="btn ghost" href="https://x.com/tailfeed" target="_blank" rel="noopener">[ x ]</a>
+          <a class="btn ghost" href="https://t.me/tailfeed" target="_blank" rel="noopener">[ t ]</a>
   <a class="btn ghost" href="https://github.com/slugelife-ux/tailfeed" target="_blank" rel="noopener">[ src ]</a>
 </header>
 
@@ -166,11 +168,11 @@
     <h2>// the gap</h2>
     <p>Every square is one of the 203 Stock Tokens. A contract is blind to a token until someone writes its price onchain.</p>
   </div>
-  <div id="gap-grid" class="gap-grid" aria-label="203 tokens: 33 priced by Chainlink, 30 priced by TailFeed, 140 still dark"></div>
+  <div id="gap-grid" class="gap-grid" aria-label="203 tokens: 33 priced by Chainlink, 60 priced by TailFeed, 110 still dark"></div>
   <div class="legend">
     <div><i class="dot ch"></i>priced by Chainlink — 33</div>
-    <div><i class="dot tf"></i>priced by TailFeed — <b id="gap-tf">30</b></div>
-    <div><i class="dot dark"></i>no onchain price — 140</div>
+    <div><i class="dot tf"></i>priced by TailFeed — <b id="gap-tf">60</b></div>
+    <div><i class="dot dark"></i>no onchain price — 110</div>
   </div>
   <p class="note">the dark mass is the product. a token without a price tag can't be collateral, can't be indexed, can't be touched by a contract. we're turning the lights on, feed by feed.</p>
 </section>
@@ -331,11 +333,11 @@ $ cast call 0x05128EC5a91Ee365e1E8b38f83157A84A5b7f2Af \
     <span>tailfeed — chainlink-compatible price feeds for the uncovered tail</span>
   </div>
   <p class="disclaimer">Not affiliated with, endorsed by, or connected to Robinhood Markets Inc. or Chainlink. Stock Tokens are complex digital assets; prices published here are for software integration and testing during the testnet phase, not investment advice. All contract source is MIT-licensed and verified onchain.</p>
-  <p class="foot-line">built in the open · uptime log public · <a href="https://x.com/tailfeed" target="_blank" rel="noopener">x.com/tailfeed</a> · <a href="https://github.com/slugelife-ux/tailfeed" target="_blank" rel="noopener">github.com/slugelife-ux/tailfeed</a></p>
+  <p class="foot-line">built in the open · uptime log public · <a href="https://x.com/tailfeed" target="_blank" rel="noopener">x.com/tailfeed</a> · <a href="https://t.me/tailfeed" target="_blank" rel="noopener">t.me/tailfeed</a> · <a href="https://github.com/slugelife-ux/tailfeed" target="_blank" rel="noopener">github.com/slugelife-ux/tailfeed</a></p>
 </footer>
 
 </main>
 
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>
