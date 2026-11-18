@@ -339,7 +339,12 @@ async fn notary<S: AsyncWrite + AsyncRead + Send + Sync + Unpin + 'static>(socke
     socket.read_to_end(&mut request_bytes).await?;
     let request: AttestationRequest = bincode::deserialize(&request_bytes)?;
 
-    let signing_key = k256::ecdsa::SigningKey::from_bytes(&[1u8; 32].into())?;
+    let key_hex = std::env::var("TAILFEED_NOTARY_KEY")
+        .expect("TAILFEED_NOTARY_KEY (hex) must be set; see /root/.secrets/tailfeed_notary.env");
+    let key_bytes = hex::decode(key_hex.trim()).expect("notary key must be hex");
+    assert_eq!(key_bytes.len(), 32, "notary key must be 32 bytes");
+    let arr: [u8; 32] = key_bytes.try_into().expect("notary key must be 32 bytes");
+    let signing_key = k256::ecdsa::SigningKey::from_bytes(&arr.into())?;
     let signer = Box::new(Secp256k1Signer::new(&signing_key.to_bytes())?);
     let mut provider = CryptoProvider::default();
     provider.signer.set_signer(signer);

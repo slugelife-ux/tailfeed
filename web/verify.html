@@ -42,7 +42,7 @@ cast call 0xE0101e17446F390EA1bc65297A8f6F98800b47A9 \
 
 <h2>Honest limits</h2>
 <ul>
-<li>The notary currently runs in-process with TailFeed: the receipt proves the data came from Robinhood's API unmodified, but the witnessing notary is us. Production swaps in an independent notary.</li>
+<li>Attestations are signed by a published witness key — <code>0x03530b03f467022994514f72e0e5e98c6268c0dcc2d16568618a47480fba5ef2ae</code> (<a href="https://github.com/slugelife-ux/tailfeed/blob/main/provenance/gate/NOTARY.md" target="_blank" rel="noopener">NOTARY.md</a>). The private half lives in a secret store on the pusher host. The receipt proves the data came from Robinhood's API unmodified; the witness is us — an independent notary is the known upgrade path, not a claim we make today.</li>
 <li>Cadence: attested pushes run every 30 minutes — those rounds' onchain answers match the receipts exactly (same values, one source). The 5-minute heartbeat pushes between them serve freshness and deviation moves; their values come from the same API but without receipts. Receipt rounds are identifiable by the anchor timestamps onchain.</li>
 </ul>
 </main>
