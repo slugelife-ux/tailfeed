@@ -14,7 +14,7 @@ import json
 import subprocess
 import sys
 import urllib.request
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from decimal import Decimal, ROUND_HALF_UP
 
 ASSETS_URL = "https://api.robinhood.com/rhj/assets"
@@ -34,24 +34,48 @@ def cast(*args):
     return out.stdout.strip()
 
 
+import re
+
+
+def parse_generated_at(ts):
+    """Parse Robinhood's RFC3339 generatedAt robustly.
+
+    The API emits nanosecond precision ("...T12:38:15.098949659Z") but
+    Python's fromisoformat/strptime accept only 3 or 6 fractional digits.
+    Returns an aware datetime or None (caller must fail closed).
+    """
+    if not isinstance(ts, str):
+        return None
+    m = re.match(
+        r"^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d+))?(Z|[+-]\d{2}:?\d{2})$", ts
+    )
+    if not m:
+        return None
+    frac = (m.group(2) or "0") + "000000"
+    off = m.group(3)
+    if off == "Z":
+        off = "+00:00"
+    elif ":" not in off:
+        off = off[:3] + ":" + off[3:]
+    try:
+        return datetime.fromisoformat(f"{m.group(1)}.{frac[:6]}{off}")
+    except ValueError:
+        return None
+
+
 def is_us_market_hours(dt_utc):
     """US equities regular session, 09:30-16:00 Eastern, DST-aware.
 
-    EST = UTC-5, EDT = UTC-4. DST in the US: 2nd Sunday of March 02:00
-    local to 1st Sunday of November 02:00 local.
+    Uses the system zoneinfo database (America/New_York) so transition
+    dates are exact. Falls back to nothing: if tz data is missing the
+    function raises, because a wrong market-hours gate is worse than none.
     """
-    if dt_utc.weekday() >= 5:
+    from zoneinfo import ZoneInfo
+
+    eastern = dt_utc.astimezone(ZoneInfo("America/New_York"))
+    if eastern.weekday() >= 5:
         return False
-    # Eastern local date/time for both candidate offsets
-    est = dt_utc - timedelta(hours=5)
-    edt = dt_utc - timedelta(hours=4)
-    # DST applies if the local (EDT-side) date is within the DST window
-    year = edt.year
-    dst_start = datetime(year, 3, (14 - datetime(year, 3, 1).weekday()) % 7 + 8, 2)
-    dst_end = datetime(year, 11, (7 - datetime(year, 11, 1).weekday()) % 7 + 1, 2)
-    is_dst = dst_start <= edt.replace(tzinfo=None) < dst_end
-    local = edt if is_dst else est
-    return 9 * 60 + 30 <= local.hour * 60 + local.minute < 16 * 60
+    return 9 * 60 + 30 <= eastern.hour * 60 + eastern.minute < 16 * 60
 
 
 def main():
@@ -106,12 +130,16 @@ def main():
                 continue
             # quote freshness: generatedAt from the receipt must be recent,
             # otherwise a stale upstream quote would publish as a fresh round
-            gen_ts = datetime.strptime(row["generated_at"], "%Y-%m-%dT%H:%M:%S.%f%z") \
-                if "." in row["generated_at"] else \
-                datetime.strptime(row["generated_at"], "%Y-%m-%dT%H:%M:%S%z")
-            age = datetime.now(timezone.utc).timestamp() - gen_ts.timestamp()
+            gen_d = parse_generated_at(row["generated_at"])
+            if gen_d is None:
+                print(f"{sym}: attested generatedAt missing/malformed, skipping (undatable quote)")
+                continue
+            age = datetime.now(timezone.utc).timestamp() - gen_d.timestamp()
             if age > args.max_quote_age:
                 print(f"{sym}: attested quote age {age:.0f}s > {args.max_quote_age}s, skipping (stale)")
+                continue
+            if age < -args.max_quote_age:
+                print(f"{sym}: attested generatedAt in the future, skipping (bad clock)")
                 continue
             px = int(row["answer"])
             if px <= 0:
@@ -121,17 +149,20 @@ def main():
             if quote.get("isTradingHalt"):
                 print(f"{sym}: halted, skipping")
                 continue
-            # quote freshness: reject quotes the API generated too long ago
-            gen = quote.get("generatedAt", "")
-            if gen:
-                try:
-                    gen_d = datetime.fromisoformat(gen.replace("Z", "+00:00"))
-                    qage = datetime.now(timezone.utc).timestamp() - gen_d.timestamp()
-                    if qage > args.max_quote_age:
-                        print(f"{sym}: quote age {qage:.0f}s > {args.max_quote_age}s, skipping (stale)")
-                        continue
-                except ValueError:
-                    pass
+            # quote freshness: fail-closed — reject quotes whose generatedAt
+            # is missing, malformed, or too old. A quote we cannot date must
+            # not publish as a fresh round.
+            gen_d = parse_generated_at(quote.get("generatedAt"))
+            if gen_d is None:
+                print(f"{sym}: generatedAt missing/malformed, skipping (undatable quote)")
+                continue
+            qage = datetime.now(timezone.utc).timestamp() - gen_d.timestamp()
+            if qage > args.max_quote_age:
+                print(f"{sym}: quote age {qage:.0f}s > {args.max_quote_age}s, skipping (stale)")
+                continue
+            if qage < -args.max_quote_age:
+                print(f"{sym}: generatedAt {qage:.0f}s in the future, skipping (bad clock)")
+                continue
             bid, ask = Decimal(quote["bid"]), Decimal(quote["ask"])
             mult = Decimal(asset["currentMultiplier"])
             token_price = (bid + ask) / 2 * mult

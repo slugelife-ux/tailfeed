@@ -319,7 +319,7 @@ $ cast call 0x96012E165CC81CfB56be3AF9F6ABBB72A39B6C9c \
 <section class="sec">
   <div class="sec-head"><h2>// straight answers</h2></div>
   <div class="faq">
-    <details><summary>Is this Chainlink?</summary><p>No. Chainlink publishes 33 feeds on this chain and does it well. TailFeed prices the other 170 and audits everyone's feeds — ours and theirs — against the exchange's own quotes. Same interface, different publisher.</p></details>
+    <details><summary>Is this Chainlink?</summary><p>No. Chainlink covers a subset of the 203 Stock Tokens on mainnet (21+ stock symbols verified by direct onchain reads; their docs claim broader). TailFeed prices the uncovered ones and audits everyone's feeds — ours and theirs — against the exchange's own quotes. Same interface, different publisher.</p></details>
     <details><summary>Why do 170 tokens have no price feed?</summary><p>Economics. Operating a feed costs money, so oracles cover the highest-volume names first. The long tail waited — and that tail is 84% of the tokens on this chain. We built for it deliberately: batch pushing makes covering all of them affordable.</p></details>
     <details><summary>Where do the prices come from?</summary><p>The exchange's own public quotes API — the same numbers a human sees on the trading screen, published onchain through our verified contracts with the timestamp of publication. Round timestamps let you be the staleness judge.</p></details>
     <details><summary>Why testnet first?</summary><p>Because infrastructure earns its mainnet slot. Shake out every failure mode on testnet, prove weeks of clean rounds, publish the uptime log — then mainnet. The beta label means something here.</p></details>

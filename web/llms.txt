@@ -2,7 +2,7 @@
 
 > Chainlink-compatible onchain price feeds for the Stock Tokens on Robinhood Chain that have no price feed, plus feed-health auditing for every feed on the chain. AggregatorV3 interface, verified source, free to read, live on testnet 46630.
 
-TailFeed publishes onchain price feeds for the ~170 of 203 Robinhood Chain Stock Tokens that no oracle covers (Chainlink publishes the other 33). Each feed is an independent AggregatorV3-compatible contract — a developer who already reads Chainlink feeds swaps one address and changes nothing else. A deviation-triggered batch pusher (≥0.5% moves or a 5-minute heartbeat) updates all feeds in one transaction. A watchdog checks every feed on the chain — ours and Chainlink's — against the exchange's own token quotes and logs the results hourly during US market hours.
+TailFeed publishes onchain price feeds for the Robinhood Chain Stock Tokens that no oracle covers (140+ of 203 today, counted against live onchain reads). Each feed is an independent AggregatorV3-compatible contract — a developer who already reads Chainlink feeds swaps one address and changes nothing else. A deviation-triggered batch pusher (≥0.5% moves or a 5-minute heartbeat) updates all feeds in one transaction. A watchdog checks every feed on the chain — ours and Chainlink's — against the exchange's own token quotes and logs the results hourly during US market hours.
 
 Key facts:
 - Product: onchain price feeds (oracle infrastructure), not a token, not financial advice

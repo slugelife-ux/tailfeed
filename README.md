@@ -2,7 +2,7 @@
 
 Onchain price feeds for the Stock Tokens Chainlink doesn't cover — plus feed-health monitoring for every feed on Robinhood Chain.
 
-**203 Stock Tokens trade on Robinhood Chain. Chainlink prices 33. The other 170 have no contract-readable price at all.** TailFeed publishes those missing prices as AggregatorV3-compatible feeds: if your contract already reads Chainlink, you swap one address and change nothing else.
+**203 Stock Tokens trade on Robinhood Chain. Over 140 have no oracle price feed.** TailFeed publishes those missing prices as AggregatorV3-compatible feeds: if your contract already reads Chainlink, you swap one address and change nothing else.
 
 - Status: **live on testnet** (chain 46630). Mainnet after a stable testnet window.
 - Reads are free. Source is verified on the chain's own explorer. No token — none is needed.
