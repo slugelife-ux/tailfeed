@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TailFeed — price feeds for the tokens nobody prices</title>
-<meta name="description" content="Chainlink-compatible onchain price feeds for the 170 Stock Tokens on Robinhood Chain with no price feed, plus feed-health audits. Live on testnet.">
+<meta name="description" content="Chainlink-compatible onchain price feeds for the Stock Tokens on Robinhood Chain without oracle coverage, plus feed-health audits. 60 feeds live on testnet.">
 <link rel="canonical" href="https://tailfeed.dev/">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="TailFeed">
 <meta property="og:title" content="TailFeed — price feeds for the tokens nobody prices">
-<meta property="og:description" content="170 of the 203 Stock Tokens on Robinhood Chain have no onchain price feed. TailFeed publishes what's missing — AggregatorV3-compatible, verified source, free to read. Live on testnet.">
+<meta property="og:description" content="More than 140 of the 203 Stock Tokens on Robinhood Chain have no oracle price feed. TailFeed publishes what's missing — AggregatorV3-compatible, verified source, free to read. 60 feeds live on testnet.">
 <meta property="og:url" content="https://tailfeed.dev/">
 <meta property="og:image" content="https://tailfeed.dev/assets/logo.jpg">
 
@@ -51,7 +51,7 @@
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Robinhood Chain (EVM, testnet 46630)",
       "url": "https://tailfeed.dev/",
-      "description": "Onchain price-feed protocol for the ~170 of 203 Robinhood Chain Stock Tokens with no oracle coverage. Each feed is an independent AggregatorV3-compatible contract: latestRoundData(), 8 decimals, drop-in for Chainlink consumers. A deviation-triggered batch pusher updates all feeds in one transaction; a watchdog audits every feed on the chain against the exchange's own quotes.",
+      "description": "Onchain price-feed protocol for the Robinhood Chain Stock Tokens without oracle coverage (at least 140 of 203 today, counted against live onchain reads). Each feed is an independent AggregatorV3-compatible contract: latestRoundData(), 8 decimals, drop-in for Chainlink consumers. A deviation-triggered batch pusher updates all feeds in one transaction; a watchdog audits every feed on the chain against the exchange's own quotes.",
       "isAccessibleForFree": true,
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "softwareRequirements": "Any EVM client or JSON-RPC endpoint",
@@ -64,12 +64,12 @@
         {
           "@type": "Question",
           "name": "Is TailFeed Chainlink?",
-          "acceptedAnswer": { "@type": "Answer", "text": "No. Chainlink publishes 33 feeds on Robinhood Chain and does it well. TailFeed prices the other 170 and audits everyone's feeds — ours and theirs — against the exchange's own quotes. Same AggregatorV3 interface, different publisher." }
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Chainlink covers a subset of the 203 Stock Tokens on Robinhood Chain mainnet (we count 21+ stock symbols live by direct onchain reads; their docs claim broader coverage). TailFeed prices the ones without a feed and audits everyone's feeds — ours and theirs — against the exchange's own quotes. Same AggregatorV3 interface, different publisher." }
         },
         {
           "@type": "Question",
-          "name": "Why do 170 Stock Tokens have no price feed?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Economics. Operating a feed costs money, so oracles cover the highest-volume names first. The long tail is 84% of the tokens on Robinhood Chain. TailFeed's batch-pushing design makes covering the tail affordable: one transaction updates every moved feed." }
+          "name": "Why do so many Stock Tokens have no price feed?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Economics. Operating a feed costs money, so oracles cover the highest-volume names first. Over 140 of the 203 tokens on Robinhood Chain have no oracle coverage today. TailFeed's batch-pushing design makes covering the tail affordable: one transaction updates every moved feed." }
         },
         {
           "@type": "Question",
@@ -120,7 +120,7 @@
   <div class="hero-grid">
     <div class="hero-copy">
       <h1>Price feeds for the<br><span class="glow">tokens nobody prices.</span></h1>
-      <p class="sub">170 of the 203 Stock Tokens on Robinhood Chain have no onchain price feed — no contract on earth can read them. TailFeed publishes what's missing, in the format every contract already speaks. And we audit the feeds that do exist.</p>
+      <p class="sub">More than 140 of the 203 Stock Tokens on Robinhood Chain have no oracle price feed. TailFeed publishes the missing ones — 60 live on testnet today, expansion follows measured demand — in the format every contract already speaks. And we audit the feeds that do exist.</p>
       <div class="cta">
         <a class="btn primary" href="#feeds">watch them tick ⟶</a>
         <button class="btn" id="btn-random">feed me a random price</button>

@@ -14,7 +14,7 @@ import json
 import subprocess
 import sys
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal, ROUND_HALF_UP
 
 ASSETS_URL = "https://api.robinhood.com/rhj/assets"
@@ -34,6 +34,26 @@ def cast(*args):
     return out.stdout.strip()
 
 
+def is_us_market_hours(dt_utc):
+    """US equities regular session, 09:30-16:00 Eastern, DST-aware.
+
+    EST = UTC-5, EDT = UTC-4. DST in the US: 2nd Sunday of March 02:00
+    local to 1st Sunday of November 02:00 local.
+    """
+    if dt_utc.weekday() >= 5:
+        return False
+    # Eastern local date/time for both candidate offsets
+    est = dt_utc - timedelta(hours=5)
+    edt = dt_utc - timedelta(hours=4)
+    # DST applies if the local (EDT-side) date is within the DST window
+    year = edt.year
+    dst_start = datetime(year, 3, (14 - datetime(year, 3, 1).weekday()) % 7 + 8, 2)
+    dst_end = datetime(year, 11, (7 - datetime(year, 11, 1).weekday()) % 7 + 1, 2)
+    is_dst = dst_start <= edt.replace(tzinfo=None) < dst_end
+    local = edt if is_dst else est
+    return 9 * 60 + 30 <= local.hour * 60 + local.minute < 16 * 60
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--registry", required=True)
@@ -42,6 +62,9 @@ def main():
     ap.add_argument("--private-key", required=True)
     ap.add_argument("--deviation", default="0.005")
     ap.add_argument("--heartbeat", type=int, default=60)
+    ap.add_argument("--max-quote-age", type=int, default=120,
+                    help="reject upstream quotes older than this many seconds "
+                         "(stale quote must not publish as a fresh round)")
     ap.add_argument("--manifest", default=None,
                     help="attest_batch manifest JSON: push exactly the attested prices "
                          "(no separate quote fetch; answers come from the receipts)")
@@ -81,6 +104,15 @@ def main():
             if row["halted"]:
                 print(f"{sym}: halted (attested), skipping")
                 continue
+            # quote freshness: generatedAt from the receipt must be recent,
+            # otherwise a stale upstream quote would publish as a fresh round
+            gen_ts = datetime.strptime(row["generated_at"], "%Y-%m-%dT%H:%M:%S.%f%z") \
+                if "." in row["generated_at"] else \
+                datetime.strptime(row["generated_at"], "%Y-%m-%dT%H:%M:%S%z")
+            age = datetime.now(timezone.utc).timestamp() - gen_ts.timestamp()
+            if age > args.max_quote_age:
+                print(f"{sym}: attested quote age {age:.0f}s > {args.max_quote_age}s, skipping (stale)")
+                continue
             px = int(row["answer"])
             if px <= 0:
                 sys.exit(f"{sym}: attested manifest has non-positive price")
@@ -89,6 +121,17 @@ def main():
             if quote.get("isTradingHalt"):
                 print(f"{sym}: halted, skipping")
                 continue
+            # quote freshness: reject quotes the API generated too long ago
+            gen = quote.get("generatedAt", "")
+            if gen:
+                try:
+                    gen_d = datetime.fromisoformat(gen.replace("Z", "+00:00"))
+                    qage = datetime.now(timezone.utc).timestamp() - gen_d.timestamp()
+                    if qage > args.max_quote_age:
+                        print(f"{sym}: quote age {qage:.0f}s > {args.max_quote_age}s, skipping (stale)")
+                        continue
+                except ValueError:
+                    pass
             bid, ask = Decimal(quote["bid"]), Decimal(quote["ask"])
             mult = Decimal(asset["currentMultiplier"])
             token_price = (bid + ask) / 2 * mult
@@ -96,9 +139,12 @@ def main():
             if px <= 0:
                 sys.exit(f"{sym}: computed non-positive price")
 
-        # market hours gate for heartbeat enforcement (US equities, UTC)
+        # market hours gate for heartbeat enforcement (US equities)
+        # DST-aware: US Eastern regular session 09:30-16:00 local wall time,
+        # computed from UTC via the fixed offsets (EST=-5, EDT=-4) and the
+        # US DST rules (second Sunday in March to first Sunday in November).
         dt = datetime.now(timezone.utc)
-        market_open = dt.weekday() < 5 and 14*60+30 <= dt.hour*60 + dt.minute <= 21*60
+        market_open = is_us_market_hours(dt)
         stale = market_open and updated > 0 and (int(dt.timestamp()) - updated) > args.heartbeat
 
         if current > 0 and not stale:
