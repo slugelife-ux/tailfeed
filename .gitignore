@@ -18,3 +18,4 @@ sdk/tailfeed/node_modules/
 vendor/
 provenance/gate/target/
 provenance/gate/out/
+web/proofs/
