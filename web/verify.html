@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TailFeed — price provenance</title>
+<meta name="description" content="Every TailFeed price batch carries TLS-notary receipts: cryptographic proof the prices came from Robinhood's own API, anchored onchain.">
+<link rel="canonical" href="https://tailfeed.dev/verify.html">
+<link rel="stylesheet" href="style.css?v=9">
+</head>
+<body>
+<main>
+<h1>Price provenance</h1>
+<p class="lede">Every price batch we push carries receipts. A TLS-notary attestation proves the quote came from <code>api.robinhood.com</code> over a real TLS session — anyone can verify it, no trust in us required.</p>
+
+<h2>How it works</h2>
+<ol>
+<li>For each push batch, we open notarized TLS sessions to <code>api.robinhood.com/rhj/prices/&lt;symbol&gt;</code> (TLS 1.2, real public certificate roots).</li>
+<li>TLSNotary's MPC-TLS protocol produces an <strong>attestation</strong> per symbol: a signed receipt committing to the entire session — server identity, handshake, request, full response.</li>
+<li>A <strong>presentation</strong> reveals the response; verification checks it against the attestation and Robinhood's real certificate chain.</li>
+<li>Both roots are anchored onchain: the Merkle root over <code>keccak256(symbol ++ answer ++ generatedAt)</code> leaves and the batch root over attestation digests.</li>
+</ol>
+
+<h2>Onchain anchor</h2>
+<p><code>0xE0101e17446F390EA1bc65297A8f6F98800b47A9</code> <a href="https://explorer.testnet.chain.robinhood.com/address/0xE0101e17446F390EA1bc65297A8f6F98800b47A9" target="_blank" rel="noopener">verified on explorer</a>. Each anchor stores the two roots for one batch; the receipts below reconstruct them.</p>
+
+<h2>Latest batch</h2>
+<p id="batch-summary">loading…</p>
+<div id="batch-files"></div>
+
+<h2>Verify a receipt yourself</h2>
+<pre><code># from the repo:
+git clone https://github.com/slugelife-ux/tailfeed
+cd tailfeed/provenance/gate &amp;&amp; cargo build --release
+./target/release/verify_proof proofs/&lt;presentation file&gt;
+
+# or check the onchain anchor:
+cast call 0xE0101e17446F390EA1bc65297A8f6F98800b47A9 \
+  "anchors(uint256)(bytes32,bytes32,uint96,uint64)" &lt;batch ts&gt; \
+  --rpc-url https://rpc.testnet.chain.robinhood.com</code></pre>
+<p>Verification is standalone and offline: the presentation file plus public certificate roots. No TailFeed server involved.</p>
+
+<h2>Honest limits</h2>
+<ul>
+<li>The notary currently runs in-process with TailFeed: the receipt proves the data came from Robinhood's API unmodified, but the witnessing notary is us. Production swaps in an independent notary.</li>
+<li>Attestations cover the quote fetches. The pusher currently fetches quotes separately at push time; the full one-source wiring (push exactly the attested prices) is in progress. Until then, compare the receipt prices against the onchain rounds for the same window.</li>
+</ul>
+</main>
+<script>
+fetch('proofs/manifest-latest.json').catch(() => null).then(async (r) => {
+  let m = null;
+  if (r && r.ok) m = await r.json();
+  if (!m) {
+    const list = await (await fetch('proofs/')).catch(() => null);
+    // static host: fall back to the known manifest
+    m = await (await fetch('proofs/manifest-1794994448.json')).json();
+  }
+  const dt = new Date(m.batch_time * 1000).toUTCString();
+  document.getElementById('batch-summary').innerHTML =
+    `batch <code>${m.batch_time}</code> · ${m.feeds.length} feeds · session ${dt}<br>` +
+    `merkle root <code>${m.merkle_root.slice(0, 34)}…</code> · batch root <code>${m.batch_root.slice(0, 30)}…</code>`;
+  const rows = m.feeds.map(f =>
+    `<tr><td>${f.symbol}</td><td class="mono">${f.bid} / ${f.ask}</td><td class="mono">${(f.answer / 1e8).toFixed(4)}</td><td><a href="proofs/${f.presentation}">receipt</a></td></tr>`)
+    .join('');
+  document.getElementById('batch-files').innerHTML =
+    `<table id="proof-table"><thead><tr><th>symbol</th><th>attested bid / ask</th><th>pushed answer</th><th>receipt</th></tr></thead><tbody>${rows}</tbody></table>`;
+});
+</script>
+</body>
+</html>
