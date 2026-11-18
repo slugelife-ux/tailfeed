@@ -43,7 +43,7 @@ cast call 0xE0101e17446F390EA1bc65297A8f6F98800b47A9 \
 <h2>Honest limits</h2>
 <ul>
 <li>The notary currently runs in-process with TailFeed: the receipt proves the data came from Robinhood's API unmodified, but the witnessing notary is us. Production swaps in an independent notary.</li>
-<li>Attestations cover the quote fetches. The pusher currently fetches quotes separately at push time; the full one-source wiring (push exactly the attested prices) is in progress. Until then, compare the receipt prices against the onchain rounds for the same window.</li>
+<li>Cadence: attested pushes run every 30 minutes — those rounds' onchain answers match the receipts exactly (same values, one source). The 5-minute heartbeat pushes between them serve freshness and deviation moves; their values come from the same API but without receipts. Receipt rounds are identifiable by the anchor timestamps onchain.</li>
 </ul>
 </main>
 <script>

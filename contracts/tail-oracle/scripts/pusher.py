@@ -42,17 +42,27 @@ def main():
     ap.add_argument("--private-key", required=True)
     ap.add_argument("--deviation", default="0.005")
     ap.add_argument("--heartbeat", type=int, default=60)
+    ap.add_argument("--manifest", default=None,
+                    help="attest_batch manifest JSON: push exactly the attested prices "
+                         "(no separate quote fetch; answers come from the receipts)")
     args = ap.parse_args()
     feeds = json.load(open(args.feeds))
 
-    assets = {a["tokenSymbol"]: a for a in http_json(ASSETS_URL)["assets"]}
+    attested = None
+    if args.manifest:
+        m = json.load(open(args.manifest))
+        attested = {r["symbol"].upper(): r for r in m["feeds"]}
+        print(f"manifest mode: {len(attested)} attested prices from {args.manifest}")
+    else:
+        assets = {a["tokenSymbol"]: a for a in http_json(ASSETS_URL)["assets"]}
 
     push_ids, push_answers = [], []
     for f in feeds:
         sym, fid = f["symbol"].upper(), f["id"]
-        asset = assets.get(sym)
-        if asset is None:
-            sys.exit(f"{sym}: not in assets API")
+        if args.manifest is None:
+            asset = assets.get(sym)
+            if asset is None:
+                sys.exit(f"{sym}: not in assets API")
 
         proxy = cast("call", args.registry, "proxyOf(uint256)(address)", str(fid), "--rpc-url", args.rpc)
         if int(proxy, 16) == 0:
@@ -64,16 +74,27 @@ def main():
         parts = rd.replace("[", "").replace("]", "").replace(",", "").split()
         current, updated = int(parts[1]), int(parts[3])
 
-        quote = http_json(PRICE_URL.format(sym))["quotes"][0]
-        if quote.get("isTradingHalt"):
-            print(f"{sym}: halted, skipping")
-            continue
-        bid, ask = Decimal(quote["bid"]), Decimal(quote["ask"])
-        mult = Decimal(asset["currentMultiplier"])
-        token_price = (bid + ask) / 2 * mult
-        px = int((token_price * Decimal(10) ** 8).quantize(Decimal(1), rounding=ROUND_HALF_UP))
-        if px <= 0:
-            sys.exit(f"{sym}: computed non-positive price")
+        if args.manifest:
+            row = attested.get(sym)
+            if row is None:
+                sys.exit(f"{sym}: not in manifest {args.manifest}")
+            if row["halted"]:
+                print(f"{sym}: halted (attested), skipping")
+                continue
+            px = int(row["answer"])
+            if px <= 0:
+                sys.exit(f"{sym}: attested manifest has non-positive price")
+        else:
+            quote = http_json(PRICE_URL.format(sym))["quotes"][0]
+            if quote.get("isTradingHalt"):
+                print(f"{sym}: halted, skipping")
+                continue
+            bid, ask = Decimal(quote["bid"]), Decimal(quote["ask"])
+            mult = Decimal(asset["currentMultiplier"])
+            token_price = (bid + ask) / 2 * mult
+            px = int((token_price * Decimal(10) ** 8).quantize(Decimal(1), rounding=ROUND_HALF_UP))
+            if px <= 0:
+                sys.exit(f"{sym}: computed non-positive price")
 
         # market hours gate for heartbeat enforcement (US equities, UTC)
         dt = datetime.now(timezone.utc)
