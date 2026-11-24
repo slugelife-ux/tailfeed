@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TailFeed — reliability record</title>
+<meta name="description" content="TailFeed's public reliability record: receipt batches delivered, push outcomes, onchain anchors, and incidents — gaps included.">
+<link rel="canonical" href="https://tailfeed.dev/status.html">
+<link rel="stylesheet" href="style.css?v=9">
+</head>
+<body>
+<main>
+<h1>Reliability record</h1>
+<p class="lede">The honest ledger: what ran, what failed, and when. Gaps stay on the page — an oracle that only shows uptime is marketing, not a record.</p>
+
+<div id="live" class="card">loading…</div>
+
+<h2>What these numbers mean</h2>
+<ul>
+<li><strong>Receipt batches</strong> — notarized TLS sessions with api.robinhood.com, one per feed, both roots anchored onchain. Cadence: every 30 minutes.</li>
+<li><strong>Price pushes</strong> — 5-minute heartbeat updates with 0.5% deviation gating; prices kept flowing even when the receipt pipeline was down.</li>
+<li><strong>Feeds</strong> — independent AggregatorV3-compatible contracts; "stale" means no update in over an hour during this build's snapshot.</li>
+</ul>
+
+<h2>Incidents</h2>
+<div id="incidents"></div>
+
+<h2>Verify it yourself</h2>
+<p>Anchors are onchain at <code>0xE0101e17446F390EA1bc65297A8f6F98800b47A9</code>; receipts at <a href="verify.html">/verify.html</a>; this record is generated from the pusher host's own logs, rebuilt hourly.</p>
+</main>
+<script>
+fetch('status.json').then(r => r.json()).then(s => {
+  const t = new Date(s.generated_at * 1000).toUTCString();
+  const gap = s.receipts.receipts_age_hours;
+  const gapLine = gap === null ? 'no receipts yet'
+    : gap > 2 ? `⚠ last receipt batch ${gap.toFixed(1)}h ago — see incidents`
+    : `last receipt batch ${gap.toFixed(1)}h ago`;
+  document.getElementById('live').innerHTML = `
+    <p><strong>prices</strong>: ${s.prices.pushes_ok.toLocaleString()} pushes ok · ${s.prices.pushes_failed} failed · 5-min heartbeat</p>
+    <p><strong>receipts</strong>: ${s.receipts.batches_delivered} batches delivered of ${s.receipts.attempts} attempts · ${gapLine}</p>
+    <p><strong>onchain</strong>: ${s.chain.feeds} feeds · ${s.chain.feeds_stale_over_1h} stale &gt;1h · ${s.chain.anchors_onchain} anchors</p>
+    <p class="dim">record since ${s.record_begins} · snapshot ${t}</p>`;
+  document.getElementById('incidents').innerHTML = s.incidents.map(i =>
+    `<div class="card"><p><strong>${i.from} → ${i.to}</strong></p><p>${i.what}</p></div>`).join('');
+});
+</script>
+</body>
+</html>
